@@ -13,6 +13,18 @@ void Menu::render(RenderTarget* drawObj)
 {
 }
 
+void Menu::checkKeyboardEvents()
+{
+}
+
 void Menu::run()
+{
+}
+
+void Menu::initTextures()
+{
+}
+
+void Menu::endState()
 {
 }

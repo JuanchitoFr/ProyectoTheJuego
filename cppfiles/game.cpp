@@ -1,56 +1,134 @@
 #include "pch.h"
 #include "../doth/game.h"
 
-Game::Game(int altoV = 0, int anchoV = 0, short framerate = 0, String tituloJ = "")
+Game::Game(unsigned int altoV = 0, unsigned int anchoV = 0, unsigned int framerate = 0, String tituloJ = "")
 {
 	this->altoVentana = altoV;
 	this->anchoVentana = anchoV;
+	this->framerate = framerate;
 	this->tituloJuego = tituloJ;
+	this->deltaT = 0.f;
 	this->ventana = new RenderWindow(VideoMode(anchoV, altoV), tituloJuego);
 	this->ventana->setFramerateLimit(framerate);
 	initStates();
+	run();
 }
 
 Game::~Game()
 {
-	
+	delete this->ventana;
 	while (!this->estados.empty()) {
 		delete this->estados.top();
 		this->estados.pop();
 	}
-	delete ventana;
+	
 }
 
 void Game::render()
 {
-	this->ventana->clear();
-	if (!this->estados.empty()) {
-		this->estados.top()->render(this->ventana);
+	try
+	{
+		this->ventana->clear(Color::Blue);
+		if (!this->estados.empty()) {
+			this->estados.top()->render(this->ventana);
+		}
+		ventana->display();
 	}
-	ventana->display();
+	catch (const std::exception& p)
+	{
+		std::cout << "The problemas was: " << p.what() << std::endl;
+	}
+	
 
+}
+
+void Game::updateState()
+{
+	try
+	{
+		this->stateEvents();
+		if (!this->estados.empty())
+
+		{
+			this->estados.top()->Update(this->deltaT);
+
+			if (this->estados.top()->getEndState())
+			{
+				this->estados.top()->endState();
+				delete this->estados.top();
+				this->estados.pop();
+			}
+		}
+		else
+		{
+			this->ventana->close();
+		}
+	}
+	catch (const std::exception& p)
+	{
+		std::cout << "The problemas was: " << p.what() << std::endl;
+	}
+	
 }
 
 
 void Game::run()
 {
 	while (this->ventana->isOpen()) {
-		checkStop();
+		updateState();
 		render();
 	}
 }
 
-void Game::checkStop()
+void Game::stateEvents()
 {
-	while (ventana->pollEvent(eventos))
+	try
 	{
-		if (eventos.type == Event::Closed)
+		while (this->ventana->pollEvent(this->event))
 		{
-			ventana->close();
-		}
+			switch (this->event.type)
+			{
+				case Event::Closed:
+				{
+					this->ventana->close();
+					break;
+				}
 
+				case Event::KeyPressed:
+				{
+					switch (event.key.code)
+					{
+					case Keyboard::A:
+					{
+						std::cout << "Se esta presionando la tecla A"  << std::endl;
+						break;
+					}
+						
+						default:
+							break;
+					}
+					break;
+				}
+				case Event::Resized:
+				{
+					glViewport(0, 0, event.size.width, event.size.height);
+					std::cout << "Nueva anchura de la pantalla: " << event.size.width << std::endl;
+					std::cout << "Nueva altura de la pantalla: " << event.size.height << std::endl;
+					break;
+				}
+				default:
+					break;
+			}
+		}
 	}
+	catch (const std::exception& p)
+	{
+		std::cout << "The problemas was: " << p.what() << std::endl;
+	}
+	
 }
+
+
 
 void Game::initStates()
 {

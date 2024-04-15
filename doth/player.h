@@ -4,11 +4,14 @@
 
 class Player : public Entity 
 {
-public:
-	Player(Texture* playerTexture);
-	virtual ~Player();
-
 private:
+
+public:
+	Player(float xPos, float yPos, int hp, String name, float spriteWidht, float spriteHeight, Texture* playerTexture);
+	virtual ~Player();
+	void entityMovement(double deltaTime, float x, float y, float speed) override;
+	void render(RenderTarget* objTarget) override;
+	void updateTimeInScreen(double deltaT) override;
 
 };
 

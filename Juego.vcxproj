@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cppfiles\entity.cpp" />
+    <ClCompile Include="cppfiles\entitymethods.cpp" />
     <ClCompile Include="cppfiles\game.cpp" />
     <ClCompile Include="cppfiles\gamemethods.cpp" />
     <ClCompile Include="cppfiles\gamestatus.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="doth\ingame.h" />
     <ClInclude Include="doth\menu.h" />
     <ClInclude Include="doth\player.h" />
+    <ClInclude Include="doth\entitymethods.h" />
     <ClInclude Include="Precompiled header\pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

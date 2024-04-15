@@ -11,7 +11,10 @@ class Menu : public GameStatus
 		Menu(std::stack<GameStatus*>* stateType = nullptr, RenderWindow* window = nullptr);
 		virtual ~Menu();
 		void render(RenderTarget* drawObj) override;
+		void checkKeyboardEvents() override;
 		void run() override;
+		void initTextures();
+		void endState() override;
 
 
 

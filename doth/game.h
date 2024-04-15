@@ -9,20 +9,22 @@
 class Game
 {
 	private:
-		int anchoVentana;
-		int altoVentana;
-		short framerate;
+		unsigned int anchoVentana;
+		unsigned int altoVentana;
+		unsigned int framerate;
 		String tituloJuego;
 		RenderWindow* ventana;
-		Event eventos;
+		Event event;
 		std::stack<GameStatus*> estados;
+		double deltaT;
 
 	public:
-		Game(int altoV, int anchoV, short framerate, String tituloJ);
+		Game(unsigned int altoV, unsigned int anchoV, unsigned int framerate, String tituloJ);
 		virtual ~Game();
 		void render();
+		void updateState();
 		void run();
-		void checkStop();
+		void stateEvents();
 		void initStates();
 };
 

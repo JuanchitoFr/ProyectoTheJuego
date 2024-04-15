@@ -7,8 +7,7 @@
 
 int main()
 {
-    
-    Game JuegoPrincipal(800,800,60,"The game");
+    Game Juego(800, 800, 60, "The game");
 
     return 0;
 }

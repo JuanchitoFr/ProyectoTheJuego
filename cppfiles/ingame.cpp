@@ -15,11 +15,25 @@ Ingame::~Ingame()
 
 void Ingame::render(RenderTarget* drawObj)
 {
-	if (!drawObj) {
-		drawObj = this->ventana;
+	try
+	{
+		if (!drawObj)
+			drawObj = this->ventana;
+		this->jugadores->render(this->ventana);
+	}
+	catch (const std::exception& p)
+	{
+		std::cout << "The problemas was: " << p.what() << std::endl;
 	}
 	
-	this->jugadores->render(this->ventana);
+}
+
+void Ingame::checkKeyboardEvents()
+{
+}
+
+void Ingame::Update(const double& deltaT)
+{
 }
 
 void Ingame::run()
@@ -30,12 +44,17 @@ void Ingame::initTextures()
 {
 	Texture texture;
 	if (!texture.loadFromFile("assets/Spritesheets/Red.png")) {
-		std::cout << " No se pudo cargar, tal vez ruta incorrecta" << std::endl;
+		throw " No se pudo cargar, tal vez ruta incorrecta" ;
 	}
 	this->textures["Player1"] = texture;
 }
 
 void Ingame::initPlayer()
 {
-	this->jugadores = new Player(&this->textures["Player1"]);
+	this->jugadores = new Player(0,0,0,"",0.f,0.f, & this->textures["Player1"]);
+}
+
+void Ingame::endState()
+{
+	this->end = true;
 }
