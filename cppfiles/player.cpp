@@ -1,28 +1,30 @@
 #include "pch.h"
 #include "../doth/player.h"
 
-Player::Player(float xPos, float yPos, int hp, String name, float spriteWidht, float spriteHeight, Texture* playerTexture)
+Player::Player(int spriteWidth, int spriteHeight, Texture* playerTexture, float speed,int xPos,int yPos, unsigned int row, unsigned int xRowPos) 
+	: Entity(spriteWidth,spriteHeight,playerTexture,NULL,speed)
 {
-	this->createSprite(playerTexture);
-	this->setPosition(xPos,yPos);
+	 this->createSprite(playerTexture);
+	 this->spriteHeight = 64;
+	 this->spriteWidth = 64;
+	 /*textureRect.width = entityTexture->getSize().x / imageCount.x;
+	 std::cout << "Texture rect width" << textureRect.width << std::endl;
+	 textureRect.width = entityTexture->getSize().y / imageCount.y;
+	 std::cout << "Texture rect height " << textureRect.width << std::endl;*/
+	 this->entitySprite->setTextureRect(IntRect(xRowPos, row, spriteWidth, spriteHeight));
+	 this->setPosition(float(xPos), float(yPos));
+	 
 }
-
+ 
 Player::~Player()
 {
 }
 
-void Player::entityMovement(double deltaTime, float x, float y, float speed)
+void Player::initAnimaions()
 {
+	//walk down
 }
 
-void Player::render(RenderTarget* objTarget)
-{
-	Entity::render(objTarget);
-}
-
-void Player::updateTimeInScreen(double deltaT)
-{
-}
 
 /*void Player::setPosition(float xPos, float yPos)
 {

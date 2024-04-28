@@ -45,6 +45,9 @@
     <ClCompile Include="cppfiles\entitymethods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cppfiles\animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="doth\entity.h">
@@ -72,7 +75,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="doth\entitymethods.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="doth\animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Spritesheets\Red.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\Spritesheets\Red.png.import" />
   </ItemGroup>
 </Project>

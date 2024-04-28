@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cppfiles\animation.cpp" />
     <ClCompile Include="cppfiles\entity.cpp" />
     <ClCompile Include="cppfiles\entitymethods.cpp" />
     <ClCompile Include="cppfiles\game.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="doth\animation.h" />
     <ClInclude Include="doth\entity.h" />
     <ClInclude Include="doth\game.h" />
     <ClInclude Include="doth\gamemethods.h" />
@@ -165,6 +167,12 @@
     <ClInclude Include="doth\player.h" />
     <ClInclude Include="doth\entitymethods.h" />
     <ClInclude Include="Precompiled header\pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Spritesheets\Red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\Spritesheets\Red.png.import" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

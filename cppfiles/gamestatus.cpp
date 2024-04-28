@@ -22,12 +22,19 @@ void GameStatus::run()
 {
 }
 
-void GameStatus::checkKeyboardEvents()
+void GameStatus::checkKeyboardEvents(float deltaT)
 {
 }
 
-void GameStatus::Update(const double& deltaTime)
+void GameStatus::Update(float deltaTime)
 {
+}
+
+void GameStatus::updateMousePos()
+{
+	this->mousePosScreen = Mouse::getPosition();
+	this->mousePosWindow = Mouse::getPosition(*this->ventana);
+	this->mousePosView = this->ventana->mapPixelToCoords(Mouse::getPosition(*this->ventana));
 }
 
 void GameStatus::endState()
@@ -35,9 +42,24 @@ void GameStatus::endState()
 	this->end = true;
 }
 
+void GameStatus::parcialEndState()
+{
+	this->parcialEnd = true;
+}
+
 bool GameStatus::getEndState() const
 {
 	return this->end;
+}
+
+bool GameStatus::getParcialEndState() const
+{
+	return this->parcialEnd;
+}
+
+RenderWindow* GameStatus::getWindow()
+{
+	return this->ventana;
 }
 
 

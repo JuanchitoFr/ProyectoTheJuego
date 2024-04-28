@@ -7,11 +7,11 @@ class Player : public Entity
 private:
 
 public:
-	Player(float xPos, float yPos, int hp, String name, float spriteWidht, float spriteHeight, Texture* playerTexture);
+	Player(int spriteWidth, int spriteHeight, Texture* playerTexture, float speed, int xPos, int yPos, unsigned int row, unsigned int xRowPos);
 	virtual ~Player();
-	void entityMovement(double deltaTime, float x, float y, float speed) override;
-	void render(RenderTarget* objTarget) override;
-	void updateTimeInScreen(double deltaT) override;
+	void initAnimaions();
+	
+
 
 };
 

@@ -2,50 +2,60 @@
 #define ENTITY_H
 #include "entitymethods.h"
 
+
 class Entity : public EntityMethods
 {
-	private:
-		int hp;
-		String name;
-		float xPos, yPos;
-		float spriteWidht, spriteHeight;
+	protected:
+		//Movimiento
 		float speed;
+		Vector2f velocity;
+		Vector2i coordinates;
+		//Gestion del sprite de la entidad
+		int spriteWidth, spriteHeight;
 		Texture* entityTexture;
 		Sprite* entitySprite;
+		float elapsedT;
+		bool isMoving;
+
 		
 		
 	public:
-		Entity();
+		Entity(int spriteWidth, int spriteHeight, Texture* entityTexture,
+			Sprite* entitySprite, float speed);
 		virtual ~Entity();
-		//metodos
-		virtual void entityMovement(double deltaTime, float x, float y, float speed) override;
-		virtual void render(RenderTarget* objTarget) override;
-		virtual void updateTimeInScreen(double deltaT) override;
-		virtual void setPosition(float xPos, float yPos) override;
-		virtual Vector2f getPosition() const override;
-		void createSprite(Texture* spriteTexture);
+		//Movimiento de la entidad
+		virtual void entityMovement(float deltaTime, float x, float y) override;
+		void setEntityAnimation(float x, float y);
+		Vector2f getEntityMovement();
+		//Gestion del sprite de la entidad
+		virtual void render(RenderTarget* objTarget);
+		virtual void updateSprite(float deltaT, float switchT) override;
+		virtual void createSprite(Texture* spriteTexture);
 		
 
 
 		//Get and set
+		virtual void setPosition(float xPos, float yPos) override;
+		virtual Vector2f getPosition() override;
+		void setSpeed(float speed);
+		float getSpeed() const;
+		Vector2f getVelocity();
 		Texture* getEntityTexture() const;
 		void setEntityTexture(Texture* entityTexture);
 		Sprite* getEntitySprite() const;
 		void setEntitySprite(Sprite* entitySprite);
-		int getHp() const;
-		void setHp(const int hp);
-		String getName() const;
-		void setName(const String name);
-		float getSpriteWidht() const;
-		void setSpriteWidht(const float spriteWidht);
-		float getSpriteHeight() const;
-		void setSpriteHeight(const float spriteHeight);
-		void setSpeed(const float speed);
-		float getSpeed() const;
-		float getXpos() const;
-		void setXpos(const float xPos);
-		float getYpos() const;
-		void setYpos(const float yPos);
+		int getSpriteWidth() const;
+		void setSpriteWidth(int spriteWidth);
+		int getSpriteHeight() const;
+		void setSpriteHeight(int spriteHeight);
+		int getCoordinatesX();
+		int getCoordinatesY();
+		void setCoordinatesX(int x);
+		void setCoordinatesY(int y);
+		bool getIsMoving();
+		void setIsMoving(bool isMoving);
+		
+		
 };
 	
 

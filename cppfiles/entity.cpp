@@ -1,57 +1,104 @@
 #include "pch.h"
 #include "../doth/entity.h"
 
-Entity::Entity()
+
+Entity::Entity(int spriteWidth = 0, int spriteHeight = 0, Texture* entityTexture = NULL, Sprite* entitySprite = NULL, float speed = 0.f)
 {
-	this->entityTexture = NULL; this->entitySprite = NULL; this->speed = 100.f; this->hp = 0;
-	this->name = ""; this->spriteHeight = 0; this->spriteWidht = 0; this->xPos = 0; this->yPos = 0;
+	this->velocity = Vector2f(0.f, 0.f); this->coordinates = Vector2i(0, 0); this->elapsedT = 0.f; this->isMoving = false;
 }
 
 Entity::~Entity()
 {
-	delete entitySprite;
+	delete this->entitySprite;
 }
 
-void Entity::entityMovement(double deltaTime, float x, float y, float speed)
+void Entity::entityMovement(float deltaTime, float x, float y)
 {
+		this->velocity.x = this->speed * x;
+		this->velocity.y = this->speed * y;
+		this->entitySprite->move(getVelocity() * deltaTime);
+	
 }
 
-void Entity::render(RenderTarget* drawObj)
+void Entity::setEntityAnimation(float x, float y)
 {
-	try
-	{
-		if(!entitySprite != NULL)
-		drawObj->draw(*this->entitySprite);
-	}
-	catch (const std::exception& p)
-	{
-		std::cout <<"The problem was: " << p.what() << std::endl;
+	this->velocity.x = x;
+	this->velocity.y = y;
+}
+
+Vector2f Entity::getEntityMovement()
+{
+	return this->velocity;
+}
+
+void Entity::render(RenderTarget* objTarget)
+{
+	if (entitySprite != NULL) {
+		objTarget->draw(*this->entitySprite);
 	}
 		
 }
 
-void Entity::updateTimeInScreen(double deltaT)
+void Entity::updateSprite(float deltaT, float switchT)
 {
+	if (isMoving == true) 
+	{
+		elapsedT += deltaT;
+
+		if (elapsedT >= switchT) {
+			elapsedT -= switchT;
+			coordinates.x++;
+
+			if (coordinates.x * 64 >= this->getEntityTexture()->getSize().x) {
+				coordinates.x = 0;
+			}
+
+		}
+		this->entitySprite->setTextureRect(IntRect(coordinates.x * spriteWidth, coordinates.y * spriteHeight, spriteWidth, spriteHeight));
+		std::cout << "deltaT: " << deltaT << std::endl;
+	}
+	else {
+		this->entitySprite->setTextureRect(IntRect(coordinates.x * spriteWidth, coordinates.y * spriteHeight, spriteWidth, spriteHeight));
+	}
+	
+		
+		
 }
 
 void Entity::setPosition(float xPos, float yPos)
 {
+	
 	this->entitySprite->setPosition(xPos, yPos);
 }
 
-Vector2f Entity::getPosition() const
+Vector2f Entity::getPosition() 
 {
 	return this->entitySprite->getPosition();
+}
+
+void Entity::setSpeed(float speed)
+{
+
+	 this->speed = speed;
+	 this->speed = speed;
+}
+float Entity::getSpeed() const {
+	return this->speed;
+}
+
+Vector2f Entity::getVelocity()
+{
+	return velocity;
 }
 
 
 void Entity::createSprite(Texture* spriteTexture)
 {
+	std::cout << "Im the create sprite from entity " << std::endl;
 	try
 	{
 		this->entityTexture = spriteTexture;
 		this->entitySprite = new Sprite(*entityTexture);
-		this->entitySprite->setScale(spriteWidht, spriteHeight);
 	}
 	catch (const std::exception& p)
 	{
@@ -59,7 +106,6 @@ void Entity::createSprite(Texture* spriteTexture)
 	}
 	
 }
-
 
 
 Texture* Entity::getEntityTexture() const
@@ -82,73 +128,59 @@ void Entity::setEntitySprite(Sprite* entitySprite)
 	this->entitySprite = entitySprite;
 }
 
-int Entity::getHp() const
+int Entity::getSpriteWidth() const
 {
-	return this->hp;
+	return this->spriteWidth;
 }
 
-void Entity::setHp(const int hp)
+void Entity::setSpriteWidth(int spriteWidth)
 {
-	this->hp = hp;
+	this->spriteWidth = spriteWidth;
 }
 
-String Entity::getName() const
-{
-	return this->name;
-}
-
-void Entity::setName(const String name)
-{
-	this->name = name;
-}
-
-float Entity::getSpriteWidht() const
-{
-	return this->spriteWidht;
-}
-
-void Entity::setSpriteWidht(const float spriteWidht)
-{
-	this->spriteWidht = spriteWidht;
-}
-
-float Entity::getSpriteHeight() const
+int Entity::getSpriteHeight() const
 {
 	return this->spriteHeight;
 }
 
-void Entity::setSpriteHeight(const float spriteHeight)
+void Entity::setSpriteHeight(int spriteHeight)
 {
 	this->spriteHeight = spriteHeight;
 }
 
-void Entity::setSpeed(const float speed)
+int Entity::getCoordinatesX()
 {
-	this->speed = speed;
+	return this->coordinates.x;
 }
 
-float Entity::getSpeed() const
+int Entity::getCoordinatesY()
 {
-	return this->speed;
+	return this->coordinates.y;
 }
 
-float Entity::getXpos() const
+void Entity::setCoordinatesX(int x)
 {
-	return this->xPos;
+	this->coordinates.x = x;
 }
 
-void Entity::setXpos(const float xPos)
+void Entity::setCoordinatesY(int y)
 {
-	this->xPos = xPos;
+	this->coordinates.y = y;
 }
 
-float Entity::getYpos() const
+bool Entity::getIsMoving()
 {
-	return this->yPos;
+	return this->isMoving;
 }
 
-void Entity::setYpos(const float yPos)
+void Entity::setIsMoving(bool isMoving)
 {
-	this->yPos = yPos;
+	this->isMoving = isMoving;
+
 }
+
+
+
+
+
 

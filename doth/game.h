@@ -4,7 +4,10 @@
 
 #include "Ingame.h"
 #include "menu.h"
-#include "entity.h"
+
+enum States {
+	menu,game
+};
 
 class Game
 {
@@ -12,17 +15,20 @@ class Game
 		unsigned int anchoVentana;
 		unsigned int altoVentana;
 		unsigned int framerate;
+		ContextSettings settings;
 		String tituloJuego;
 		RenderWindow* ventana;
 		Event event;
 		std::stack<GameStatus*> estados;
-		double deltaT;
+		float deltaT;
+		Clock deltaTclock;
 
 	public:
 		Game(unsigned int altoV, unsigned int anchoV, unsigned int framerate, String tituloJ);
 		virtual ~Game();
 		void render();
 		void updateState();
+		void updateDeltaT();
 		void run();
 		void stateEvents();
 		void initStates();
