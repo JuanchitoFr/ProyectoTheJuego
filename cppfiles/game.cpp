@@ -8,21 +8,20 @@ Game::Game(unsigned int altoV = 0, unsigned int anchoV = 0, unsigned int framera
 	this->framerate = framerate;
 	this->tituloJuego = tituloJ;
 	this->deltaT = 0.f;
-	this->ventana = new RenderWindow(VideoMode(anchoV, altoV), tituloJuego, Style::Fullscreen);
+	this->ventana = new RenderWindow(VideoMode(anchoV, altoV), tituloJuego, Style::Default);
 	this->ventana->setFramerateLimit(60);
 	this->ventana->setVerticalSyncEnabled(true);
 	this->settings.antialiasingLevel = 16;
 	initStates();
+	this->currentEstadoIndex = this->estados->getEstadosArrSize() - 1;
 	
 }
 
 Game::~Game()
 {
 	delete this->ventana;
-	while (!this->estados.empty()) {
-		delete this->estados.top();
-		this->estados.pop();
-	}
+	delete estados;
+
 	
 }
 
@@ -30,9 +29,10 @@ void Game::render()
 {
 	try
 	{
-		this->ventana->clear(Color::Black);
-		if (!this->estados.empty()) {
-			this->estados.top()->render(this->ventana);
+		this->ventana->clear(Color::Yellow);
+		if(this->estados != nullptr)
+		{
+			this->estados->render(this->ventana);
 		}
 		ventana->display();
 	}
@@ -49,32 +49,39 @@ void Game::updateState()
 	try
 	{
 		this->stateEvents();
-		if (!this->estados.empty())
 
+		if (this->currentEstadoIndex >= 0 && this->currentEstadoIndex < this->estados->getEstadosArrSize())
 		{
-			this->estados.top()->Update(this->deltaT);
+			// Actualiza el estado actual
+			this->estados[this->currentEstadoIndex].Update(this->deltaT);
 
-			if (this->estados.top()->getEndState())
+			// Verifica si el estado actual ha terminado
+			if (this->estados[this->currentEstadoIndex].getFin())
 			{
-					this->estados.top()->endState();
-					delete this->estados.top();
-					this->estados.pop();
-			}
-			else if (this->estados.top()->getParcialEndState()) {
-					this->estados.top()->parcialEndState();
-					delete this->estados.top();
-					this->estados.pop();
-					this->estados.push(new Ingame(&this->estados, this->ventana));
+
+				this->estados[this->currentEstadoIndex].findEstado();
+
+				// Elimina el estado actual (en este caso, simplemente marca el estado como no activo)
+				this->estados[this->currentEstadoIndex].setActive(false);
+
+				this->currentEstadoIndex--;
+
+				// Si no hay más estados activos, cierra la ventana
+				if (this->currentEstadoIndex < 0) 
+				{
+					this->ventana->close();
+				}
 			}
 		}
-		else
-		{
+		else {
+			// Si no hay estados en el array, cierra la ventana
 			this->ventana->close();
 		}
+		
 	}
 	catch (const std::exception& p)
 	{
-		std::cout << "The problemas was: " << p.what() << std::endl;
+		cerr << "ERROR::GAME::UPDATESTATE:  " << p.what() << std::endl;
 	}
 	
 }
@@ -93,7 +100,6 @@ void Game::run()
 		this->updateDeltaT();
 		this->updateState();
 		this->render();
-		Clock clock;
 	}
 }
 
@@ -128,7 +134,7 @@ void Game::stateEvents()
 				}
 				case Event::Resized:
 				{
-					FloatRect area(0, 0, event.size.width, event.size.height);
+					FloatRect area(0, 0, static_cast<float>(event.size.width), static_cast<float>(event.size.height));
 					ventana->setView(View(area));
 					std::cout << "Nueva anchura de la pantalla: " << event.size.width << std::endl;
 					std::cout << "Nueva altura de la pantalla: " << event.size.height << std::endl;
@@ -150,8 +156,11 @@ void Game::stateEvents()
 
 void Game::initStates()
 {
-	
-	this->estados.push(new Menu(&this->estados, this->ventana));
-	
+	if (this->estados == nullptr)
+	{
+		unsigned int newArrSize = 1;
+		this->estados = new Menu(&this->estados, this->ventana);
+		this->estados->setEstadosArrSize(newArrSize);
+	}
 }
 

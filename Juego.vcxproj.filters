@@ -39,13 +39,19 @@
     <ClCompile Include="cppfiles\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cppfiles\entitymethods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cppfiles\animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrecompiledHeader\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cppfiles\Buttons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cppfiles\Sockets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,13 +77,19 @@
     <ClInclude Include="doth\player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Precompiled header\pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="doth\entitymethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="doth\animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrecompiledHeader\pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="doth\Buttons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="doth\Sockets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

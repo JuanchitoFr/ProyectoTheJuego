@@ -4,22 +4,21 @@
 
 #include "Ingame.h"
 #include "menu.h"
-
-enum States {
-	menu,game
+enum stateName
+{
+	menu, ingame
 };
-
 class Game
 {
 	private:
-		unsigned int anchoVentana;
-		unsigned int altoVentana;
-		unsigned int framerate;
+		unsigned int anchoVentana, altoVentana, framerate;
+		int currentEstadoIndex;
 		ContextSettings settings;
 		String tituloJuego;
 		RenderWindow* ventana;
 		Event event;
-		std::stack<GameStatus*> estados;
+		GameStatus* estados;
+		GameStatus* currentState;
 		float deltaT;
 		Clock deltaTclock;
 

@@ -7,9 +7,10 @@ class Player : public Entity
 private:
 
 public:
-	Player(int spriteWidth, int spriteHeight, Texture* playerTexture, float speed, int xPos, int yPos, unsigned int row, unsigned int xRowPos);
+	Player(Texture* entityTexture, float speed,
+		unsigned int xTextureRectPos, unsigned int yTextureRectPos);
+	Player();
 	virtual ~Player();
-	void initAnimaions();
 	
 
 

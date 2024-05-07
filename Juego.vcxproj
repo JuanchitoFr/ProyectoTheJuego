@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cppfiles\animation.cpp" />
+    <ClCompile Include="cppfiles\Buttons.cpp" />
     <ClCompile Include="cppfiles\entity.cpp" />
     <ClCompile Include="cppfiles\entitymethods.cpp" />
     <ClCompile Include="cppfiles\game.cpp" />
@@ -154,10 +155,12 @@
     <ClCompile Include="cppfiles\menu.cpp" />
     <ClCompile Include="cppfiles\player.cpp" />
     <ClCompile Include="Juego.cpp" />
-    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="PrecompiledHeader\pch.cpp" />
+    <ClCompile Include="cppfiles\Sockets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="doth\animation.h" />
+    <ClInclude Include="doth\Buttons.h" />
     <ClInclude Include="doth\entity.h" />
     <ClInclude Include="doth\game.h" />
     <ClInclude Include="doth\gamemethods.h" />
@@ -166,7 +169,8 @@
     <ClInclude Include="doth\menu.h" />
     <ClInclude Include="doth\player.h" />
     <ClInclude Include="doth\entitymethods.h" />
-    <ClInclude Include="Precompiled header\pch.h" />
+    <ClInclude Include="PrecompiledHeader\pch.h" />
+    <ClInclude Include="doth\Sockets.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Spritesheets\Red.png" />

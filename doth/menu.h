@@ -2,58 +2,55 @@
 #define MENU_H
 
 #include "gamestatus.h"
+#include "ingame.h"
+#include "Buttons.h"
 
 
-enum typeButton
+enum Textures : unsigned int 
 {
-	playB, exitB
+	Backg_1, Backg_2, Backg_3, Backg_4, Backg_5, PlayButton, PlayBtton_Hover,PlayBtton_Pressed, Total_TexturesMn
 };
 
-enum btnStates
+enum typeBtton: unsigned int
 {
-	idle,hover,pressed
+	playButtonT, exitButtonT
 };
 
-enum TexturesBackg {
-	cloudFront, cloudMidlle, hill, mountain, backmountain, backgroundSky
-};
+
+
 
 class Menu : public GameStatus
 {
 	private:
-		std::map<unsigned short, RectangleShape> layers;
-		std::map<unsigned short, RectangleShape> buttonArr;
-		Font title, font;
-		Text text;
+		RectangleShape* backLayersArr;
+		Buttons* buttons;
+		RectangleShape* buttonArr;
+		Font titleFont, textFont;
+		Text text, titleText;
 		Sprite titleSprite;
 		Vector2u currentWinSize;
 		
-		int xRow, yColumn, xRow2;
-		unsigned short bttnState;
-		float elapsedT, elapsedT2;
+		
+		unsigned short bttnState, backLayersArrSize, buttonArrSize;
+		float elapsedT, elapsedT2, xPos,yPos, width, height;
+		void initFont();
 		void initBackground();
-		void initButtons();
-		void initTextures();
+		void initLayers(Texture& texture, Textures xd);
+		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, typeBtton xd);
+		void textureProcessor(String rute, Textures xd);
+		
 		
 		
 
 	public:
-		Menu(std::stack<GameStatus*>* stateType = nullptr, RenderWindow* window = nullptr);
+		Menu(GameStatus** estados, RenderWindow* window);
 		virtual ~Menu();
 		
 		void updateBackgroundTexture(float deltaT, float switchT, float switchT2);
 		void render(RenderTarget* drawObj) override;
 		void checkKeyboardEvents(float deltaT) override;
-		void run() override;
 		void Update(float deltaT) override;
-		void updateBttn(Vector2f mousePos);
-		void endState() override;
-		void parcialEndState() override;
-		unsigned short getBttnState();
-		int getYcolumn();
-		int getXrow();
-		void setYcolumn(int y);
-		void setXrow(int x);
+		void updateButtons();
 };
 
 #endif // !MENU_H

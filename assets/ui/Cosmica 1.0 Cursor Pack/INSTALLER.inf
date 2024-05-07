@@ -1,0 +1,128 @@
+; This installer is an INF file (setup information file) that allows the installation of a cursor scheme through right-click > Install
+
+; Required section/value for this to work
+[Version]
+signature="$CHICAGO$"
+
+; Copy cursors to DefaultDestDir defined in DestinationDirs section below
+; Create new cursor scheme (in registry)
+[DefaultInstall]
+CopyFiles = CursorFileNames.Blue, CursorFileNames.Green, CursorFileNames.Orange, CursorFileNames.Pink
+AddReg = CursorSchemeRegisteryEntry.Blue, CursorSchemeRegisteryEntry.Green, CursorSchemeRegisteryEntry.Orange, CursorSchemeRegisteryEntry.Pink
+
+; 10 => Windows directory (%SystemRoot%) + subdirectory as defined in Strings section
+[DestinationDirs]
+DefaultDestDir = 10,"%CursorSchemeDirectory%"
+
+; Definition of the cursor scheme registry entry (which is what is created when a scheme is manually saved in Mouse Properties)
+[CursorSchemeRegisteryEntry.Blue]
+HKCU,"Control Panel\Cursors\Schemes","%CursorSchemeName% Blue",0x00020000,"%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%Arrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%Help%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%AppStarting%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%Wait%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%Crosshair%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%IBeam%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%NWPen%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%No%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%SizeNS%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%SizeWE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%SizeNWSE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%SizeNESW%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%SizeAll%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%UpArrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%Hand%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%Pin%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Blue\%Person%"
+
+[CursorSchemeRegisteryEntry.Green]
+HKCU,"Control Panel\Cursors\Schemes","%CursorSchemeName% Green",0x00020000,"%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%Arrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%Help%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%AppStarting%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%Wait%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%Crosshair%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%IBeam%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%NWPen%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%No%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%SizeNS%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%SizeWE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%SizeNWSE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%SizeNESW%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%SizeAll%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%UpArrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%Hand%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%Pin%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Green\%Person%"
+
+[CursorSchemeRegisteryEntry.Orange]
+HKCU,"Control Panel\Cursors\Schemes","%CursorSchemeName% Orange",0x00020000,"%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%Arrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%Help%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%AppStarting%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%Wait%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%Crosshair%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%IBeam%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%NWPen%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%No%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%SizeNS%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%SizeWE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%SizeNWSE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%SizeNESW%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%SizeAll%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%UpArrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%Hand%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%Pin%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Orange\%Person%"
+
+[CursorSchemeRegisteryEntry.Pink]
+HKCU,"Control Panel\Cursors\Schemes","%CursorSchemeName% Pink",0x00020000,"%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%Arrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%Help%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%AppStarting%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%Wait%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%Crosshair%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%IBeam%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%NWPen%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%No%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%SizeNS%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%SizeWE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%SizeNWSE%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%SizeNESW%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%SizeAll%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%UpArrow%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%Hand%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%Pin%,%SYSTEMROOT%\%CursorSchemeDirectory%\Cosmica Pink\%Person%"
+
+
+; CopyFiles does not allow %strkey% tokens, which is why we have to list our cursors here in addition to the Strings section
+[CursorFileNames.Blue]
+Cosmica Blue/alt select.cur
+Cosmica Blue/busy.ani
+Cosmica Blue/default.cur
+Cosmica Blue/diagonal resize 1.cur
+Cosmica Blue/diagonal resize 2.cur
+Cosmica Blue/handwriting.cur
+Cosmica Blue/help select.cur
+Cosmica Blue/horizontal resize.cur
+Cosmica Blue/link select.cur
+Cosmica Blue/location select.cur
+Cosmica Blue/move.cur
+Cosmica Blue/person select.cur
+Cosmica Blue/precision select.cur
+Cosmica Blue/text select.cur
+Cosmica Blue/unavailable.cur
+Cosmica Blue/vertical resize.cur
+Cosmica Blue/working.ani
+
+[CursorFileNames.Green]
+Cosmica Green/alt select.cur
+Cosmica Green/busy.ani
+Cosmica Green/default.cur
+Cosmica Green/diagonal resize 1.cur
+Cosmica Green/diagonal resize 2.cur
+Cosmica Green/handwriting.cur
+Cosmica Green/help select.cur
+Cosmica Green/horizontal resize.cur
+Cosmica Green/link select.cur
+Cosmica Green/location select.cur
+Cosmica Green/move.cur
+Cosmica Green/person select.cur
+Cosmica Green/precision select.cur
+Cosmica Green/text select.cur
+Cosmica Green/unavailable.cur
+Cosmica Green/vertical resize.cur
+Cosmica Green/working.ani
+
+[CursorFileNames.Orange]
+Cosmica Orange/alt select.cur
+Cosmica Orange/busy.ani
+Cosmica Orange/default.cur
+Cosmica Orange/diagonal resize 1.cur
+Cosmica Orange/diagonal resize 2.cur
+Cosmica Orange/handwriting.cur
+Cosmica Orange/help select.cur
+Cosmica Orange/horizontal resize.cur
+Cosmica Orange/link select.cur
+Cosmica Orange/location select.cur
+Cosmica Orange/move.cur
+Cosmica Orange/person select.cur
+Cosmica Orange/precision select.cur
+Cosmica Orange/text select.cur
+Cosmica Orange/unavailable.cur
+Cosmica Orange/vertical resize.cur
+Cosmica Orange/working.ani
+
+[CursorFileNames.Pink]
+Cosmica Pink/alt select.cur
+Cosmica Pink/busy.ani
+Cosmica Pink/default.cur
+Cosmica Pink/diagonal resize 1.cur
+Cosmica Pink/diagonal resize 2.cur
+Cosmica Pink/handwriting.cur
+Cosmica Pink/help select.cur
+Cosmica Pink/horizontal resize.cur
+Cosmica Pink/link select.cur
+Cosmica Pink/location select.cur
+Cosmica Pink/move.cur
+Cosmica Pink/person select.cur
+Cosmica Pink/precision select.cur
+Cosmica Pink/text select.cur
+Cosmica Pink/unavailable.cur
+Cosmica Pink/vertical resize.cur
+Cosmica Pink/working.ani
+
+; Our scheme and cursor names, they are defined here so they can be used as %strkey% tokens
+[Strings]
+CursorSchemeDirectory = "Cursors\Cosmica"
+CursorSchemeName = "Cosmica"
+AppStarting = "working.ani"
+Arrow = "default.cur"
+Crosshair = "precision select.cur"
+Hand = "link select.cur"
+Help = "help select.cur"
+IBeam = "text select.cur"
+No = "unavailable.cur"
+NWPen = "handwriting.cur"
+Person = "person select.cur"
+Pin = "location select.cur"
+SizeAll = "move.cur"
+SizeNESW = "diagonal resize 2.cur"
+SizeNS = "vertical resize.cur"
+SizeNWSE = "diagonal resize 1.cur"
+SizeWE = "horizontal resize.cur"
+UpArrow = "alt select.cur"
+Wait = "busy.ani"

@@ -8,7 +8,7 @@ public:
 	virtual ~EntityMethods();
 	virtual void render(RenderTarget* objTarget) = 0;
 	virtual void entityMovement(float deltaTime, float x, float y) = 0;
-	virtual void updateSprite(float deltaT, float switchT) = 0;
+	virtual void updateSprite(float deltaT, float switchT,int numS) = 0;
 	virtual void setPosition(float xPos, float yPos) = 0;
 	virtual Vector2f getPosition() = 0;
 

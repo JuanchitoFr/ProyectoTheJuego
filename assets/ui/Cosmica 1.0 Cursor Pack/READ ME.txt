@@ -1,0 +1,39 @@
+
+         .                      .
+         .                      ;
+         :                  - --+- -
+         !           .          !
+         |        .             .
+         |_         +
+      ,  | `.
+--- --+-<#>-+- ---  --  -
+      `._|_,'
+         T	  _________  ______  _______________  
+         |	 / ___/ __ \/ __/  |/  /  _/ ___/ _ |
+         !	/ /__/ /_/ /\ \/ /|_/ // // /__/ __ |
+         :	\___/\____/___/_/  /_/___/\___/_/ |_|  V1.0
+         .      
+
+(c) Karenza Sparks, 2023 https://karenza.party/
+
+	✶ HOW TO USE/INSTALL ON YOUR HOME COMPUTER ✶
+
+Cosmica V1.0 comes with an installer that will automatically add both cursor schemes to your computer; after extracting the ZIP, right click on the installer and choose install. Cosmica cursor folders will be added to Windows\Cursors.
+
+To switch cursor schemes, go to Settings > Mouse Settings > Additional Mouse Options and navigate to the Pointers tab.
+
+If the installer isn't working for you, you can manually set your cursor appearance. To manually set cursor appearance: On the Pointers tab, click Browse to customise each cursor separately, then Save As... to name as a new scheme.
+
+For Mac users: I am under the impression customising cursors is more complicated for you. This download includes all the .cur and .ani files for the cursor sets, which can be used in whatever cursor customisation work-around you use.​
+
+	✶ PERMISSIONS ✶
+
+Free for personal use (home computer, not-for-profit personal blogs/websites), for non-commercial web use, please credit and link to > https://toumeya.itch.io/
+
+Contact me for commercial use terms & payment: karenzasparks@gmail.com
+
+No redistribution or modification.
+
+	✶ DOWNLOAD LINK ✶
+
+https://toumeya.itch.io/cosmica-v1-cursor-pack

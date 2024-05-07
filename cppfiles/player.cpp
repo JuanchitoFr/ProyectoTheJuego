@@ -1,29 +1,28 @@
 #include "pch.h"
 #include "../doth/player.h"
 
-Player::Player(int spriteWidth, int spriteHeight, Texture* playerTexture, float speed,int xPos,int yPos, unsigned int row, unsigned int xRowPos) 
-	: Entity(spriteWidth,spriteHeight,playerTexture,NULL,speed)
+Player::Player(Texture* playerTexture = nullptr, float speed = 0.f,
+	unsigned int xTextureRectPos = 0, unsigned int yTextureRectPos = 0) : Entity(playerTexture,speed)
 {
-	 this->createSprite(playerTexture);
-	 this->spriteHeight = 64;
-	 this->spriteWidth = 64;
+	 this->createSprite(*playerTexture);
 	 /*textureRect.width = entityTexture->getSize().x / imageCount.x;
 	 std::cout << "Texture rect width" << textureRect.width << std::endl;
 	 textureRect.width = entityTexture->getSize().y / imageCount.y;
 	 std::cout << "Texture rect height " << textureRect.width << std::endl;*/
-	 this->entitySprite->setTextureRect(IntRect(xRowPos, row, spriteWidth, spriteHeight));
-	 this->setPosition(float(xPos), float(yPos));
+	 this->entitySprite->setTextureRect(IntRect(xTextureRectPos, yTextureRectPos, spriteWidth, spriteHeight));
 	 
+}
+
+Player::Player()
+{
+
 }
  
 Player::~Player()
 {
 }
 
-void Player::initAnimaions()
-{
-	//walk down
-}
+
 
 
 /*void Player::setPosition(float xPos, float yPos)
