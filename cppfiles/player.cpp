@@ -10,6 +10,7 @@ Player::Player(Texture* playerTexture = nullptr, float speed = 0.f,
 	 textureRect.width = entityTexture->getSize().y / imageCount.y;
 	 std::cout << "Texture rect height " << textureRect.width << std::endl;*/
 	 this->entitySprite->setTextureRect(IntRect(xTextureRectPos, yTextureRectPos, spriteWidth, spriteHeight));
+	 stats.x = 0; stats.y = 0; stats.hp = 0; stats.atkFisico = 0; stats.defFisica = 0; stats.atkMagico = 0; stats.defMagica = 0; stats.velocidad = 0;
 	 
 }
 

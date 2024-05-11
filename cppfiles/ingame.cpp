@@ -20,8 +20,8 @@ void Ingame::render(RenderTarget* drawObj)
 		{
 			drawObj = this->ventana;
 		}
-
-		this->player[Dragon]->render(this->ventana);
+		player[Dragon]->render(drawObj);
+		
 		/*drawObj->setView(View(winSize));*/
 		
 	}
@@ -149,39 +149,27 @@ void Ingame::initPlayer(Texture* playerTexture, playerType xd)
 {
 	try
 	{
-		for (unsigned int i = 0;i < playerArrSize;i++)
-		{
-
-		
-			if (this->playerArrSize == 0 || this->player == nullptr)
+			if (xd >= playerArrSize)
 			{
-
-				playerArrSize++;
-				/*player[i] = new Player[playerArrSize]();*/
-			}
-			else
-			{
-				if (xd >= playerArrSize)
-				{
-					// Crear un nuevo array con el tamaño incrementado
-					unsigned int newSize = xd + 1;
-					Entity* newArrayB = new Player[newSize]();
-					// Copiar las texturas del array original al nuevo array
-					for (unsigned int i = 0; i < playerArrSize; i++) {
-						newArrayB[i] = *player[i];
-					}
-					// Liberar la memoria del array original y asignar el nuevo array
-					delete[] player;
-					*player = newArrayB;
-					// Actualizar el tamaño del array
-					playerArrSize = newSize;
+				// Crear un nuevo array con el tamaño incrementado
+				unsigned int newSize = xd + 1;
+				Entity** newArrayB = new Entity*[newSize]();
+				// Copiar las texturas del array original al nuevo array
+				for (unsigned int i = 0; i < playerArrSize; i++) {
+					newArrayB[i] = player[i];
 				}
+				// Liberar la memoria del array original y asignar el nuevo array
+				delete[] player;
+				player = newArrayB;
+				// Actualizar el tamaño del array
+				playerArrSize = newSize;
 			}
+
 			Vector2f bgSize(static_cast<float>(this->ventana->getSize().x),
 				static_cast<float>(this->ventana->getSize().y));
 			std::cout << "Tamaño: " << bgSize.x << " : " << bgSize.y << endl;
+			this->player[xd] = new Player(playerTexture, 100.f, playerTexture->getSize().x, playerTexture->getSize().y);
 
-		}
 
 	}
 	catch (const std::exception& p)

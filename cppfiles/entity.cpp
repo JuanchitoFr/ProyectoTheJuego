@@ -1,11 +1,28 @@
 #include "pch.h"
 #include "../doth/entity.h"
 
+void Entity::init(int stats[])
+{
+	if (arrSize > 0)
+	{
+		coordinates.x = stats[0];
+		coordinates.y = stats[1];
+		this->stats.x = (int)coordinates.x;
+		this->stats.y = (int)coordinates.y;
+		this->stats.hp = stats[2];
+		this->stats.atkFisico = stats[3];
+		this->stats.defMagica = stats[4];
+		this->stats.atkMagico = stats[5];
+		this->stats.defMagica = stats[6];
+		this->stats.velocidad = stats[7];
+
+	}
+}
 
 Entity::Entity(Texture* entityTexture = nullptr, float speed = 0.f) : entityTexture(entityTexture), speed(speed)
 {
 	this->velocity = Vector2f(0.f, 0.f); this->coordinates = Vector2f(0.f, 0.f); this->elapsedT = 0.f; 
-	this->entitySprite = NULL; this->spriteHeight = 0; this->spriteWidth = 0;
+	this->entitySprite = nullptr; this->spriteHeight = 0; this->spriteWidth = 0; this->checkDead = true;
 	
 	/*Tamaño de los array*/
 	this->entitySize = 0; this->entityAmount = 0; this->checkSize = 0;
@@ -15,6 +32,11 @@ Entity::Entity(Texture* entityTexture = nullptr, float speed = 0.f) : entityText
 }
 Entity::Entity()
 {
+	this->elapsedT = 0; this->entityAmount = 0;
+	this->entitySize = 0; this->checkSize = 0; 
+	this->entitySprite = nullptr; this->entityTexture = nullptr;
+	this->spriteHeight = 0; this->spriteWidth = 0;
+	this-> checkDead = false;
 }
 
 Entity::~Entity()
@@ -68,34 +90,9 @@ void Entity::createSprite(Texture spriteTexture)
 	std::cout << "Im the create sprite from entity " << std::endl;
 	try
 	{
-		this->entitySize += entityAmount;
-		
-		if (entitySize == checkSize) 
-		{
-			Texture* newArrTexture = new Texture[entitySize]();
-			Sprite* newArrSprite = new Sprite[entitySize]();
-			for (unsigned int i = 0; i < entitySize - 1; i++)
-			{
-				newArrTexture[i] = entityTexture[i];
-				newArrSprite[i].setTexture(newArrTexture[i]);
-			}
-			for (unsigned int i = entitySize; i <= entitySize; i++)
-			{
-				newArrTexture[i] = spriteTexture;
-				newArrSprite[i].setTexture(newArrTexture[i]);
-			}
-			this->entityTexture = newArrTexture;
-			this->entitySprite = newArrSprite;
-			delete[] newArrTexture, newArrSprite;
-		}
-		
-		if (entityAmount == 0) {
-			this->entityAmount++;
-		}
-		else {
-			this->entityAmount = entityAmount;
-			this->checkSize++;
-		}
+		this->entityTexture = &spriteTexture;
+
+		this->entitySprite = new Sprite(*entityTexture);
 		
 	}
 	catch (const std::exception& p)
@@ -104,6 +101,17 @@ void Entity::createSprite(Texture spriteTexture)
 	}
 	
 }
+
+void Entity::updateCharactState()
+{
+
+}
+
+void Entity::addDamage(int damage)
+{
+	 stats.hp -= damage;
+}
+
 
 
 //Getters & setters
@@ -144,6 +152,57 @@ unsigned int Entity::getEntityCount()
 	return entityAmount;
 }
 
+int Entity::getHp()
+{
+	return stats.hp;
+}
+
+int Entity::getDefMagica()
+{
+	return stats.defFisica;
+}
+
+int Entity::getDefFisica()
+{
+	return stats.defFisica;
+}
+
+int Entity::getAtkFisico()
+{
+	return stats.atkFisico;
+}
+
+int Entity::getAtkMagico()
+{
+	return stats.atkMagico;
+}
+
+int Entity::getVelocidad()
+{
+	return stats.velocidad;
+}
+
+IpAddress Entity::getIp()
+{
+	return ip;
+}
+
+Estadisticas* Entity::estadisticas()
+{
+	return &stats;
+}
+
+bool Entity::isAlive()
+{
+	if(stats.hp = 0)
+	{
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 
 unsigned int Entity::getEntitySize()
 {
@@ -167,6 +226,7 @@ void Entity::setPosition(float xPos, float yPos)
 	this->entitySprite->setPosition(xPos, yPos);
 }
 
+
 Vector2f Entity::getPosition()
 {
 	return this->entitySprite->getPosition();
@@ -185,9 +245,29 @@ Vector2f Entity::getVelocity()
 	return velocity;
 }
 
+Packet& operator<<(Packet& packet, Entity& entity)
+{
+	return packet
+		<< entity.coordinates.x
+		<< entity.coordinates.y
+		<< entity.stats.hp
+		<< entity.stats.atkFisico
+		<< entity.stats.defFisica
+		<< entity.stats.atkMagico
+		<< entity.stats.defMagica
+		<< entity.stats.velocidad;
+	
+}
 
-
-
-
-
-
+Packet& operator>>(Packet& packet, Entity& entity)
+{
+	return packet
+		>> entity.coordinates.x
+		>> entity.coordinates.y
+		>> entity.stats.hp
+		>> entity.stats.atkFisico
+		>> entity.stats.defFisica
+		>> entity.stats.atkMagico
+		>> entity.stats.defMagica
+		>> entity.stats.velocidad;
+}

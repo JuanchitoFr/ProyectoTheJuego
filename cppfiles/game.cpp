@@ -164,3 +164,8 @@ void Game::initStates()
 	}
 }
 
+void Game::recibirDatos()
+{
+	IpAddress emisor;
+}
+

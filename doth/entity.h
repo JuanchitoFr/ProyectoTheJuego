@@ -2,11 +2,24 @@
 #define ENTITY_H
 #include "entitymethods.h"
 
+enum statsOrder
+{
+	x,y,hp, atkFisico,defFisica,atkMagico,defMagica, velocidad, totalStatsSize
+};
+struct Estadisticas
+{
+	int x; int y;
+	int hp; int defMagica;
+	int defFisica; int atkFisico;
+	int atkMagico; int velocidad;
+};
+
 
 class Entity : public EntityMethods
 {
 	protected:
 		//Movimiento
+		IpAddress ip;
 		float speed;
 		Vector2f velocity;
 		Vector2f coordinates;
@@ -16,7 +29,12 @@ class Entity : public EntityMethods
 		Texture* entityTexture;
 		Sprite* entitySprite;
 		float elapsedT;
-
+		bool checkDead;
+		Estadisticas stats;
+		void init(int stats[]);
+		static const short arrSize = 8;
+		int arrStats[arrSize];
+		const int totalAllStatsAmount = 600;
 	public:
 		Entity(Texture* entityTexture, float speed);
 		Entity();
@@ -24,8 +42,8 @@ class Entity : public EntityMethods
 		
 		// METODOS
 		/*Movimiento y posicion de la entidad*/
-		virtual void setPosition(float xPos, float yPos) override;
-		virtual Vector2f getPosition() override;
+		void setPosition(float xPos, float yPos) override;
+		Vector2f getPosition() override;
 		void setSpeed(float speed);
 		float getSpeed() const;
 		Vector2f getVelocity();
@@ -37,6 +55,9 @@ class Entity : public EntityMethods
 		virtual void render(RenderTarget* objTarget);
 		virtual void updateSprite(float deltaT, float switchT, int numS) override;
 		virtual void createSprite(Texture spriteTexture);
+		void updateCharactState();
+		virtual void addDamage(int damage);
+
 		
 		//Getters and setters
 		/*Gestion de la textura y el sprite*/
@@ -48,6 +69,18 @@ class Entity : public EntityMethods
 		void setSpriteHeight(unsigned int spriteHeight);
 		unsigned int getEntitySize();
 		unsigned int getEntityCount();
+		int getHp(); 
+		int getDefMagica();
+		int getDefFisica(); 
+		int getAtkFisico();
+		int getAtkMagico(); 
+		int getVelocidad();
+		IpAddress getIp();
+		Estadisticas* estadisticas();
+		bool isAlive();
+
+		friend Packet& operator<<(Packet& packet, Entity& entity);
+		friend Packet& operator>>(Packet& packet, Entity& entity);
 		
 		
 
