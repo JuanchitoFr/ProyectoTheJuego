@@ -25,18 +25,26 @@ enum textureType : unsigned short
 	Dragon_T, Dragon_FireEffect , Total_TexturesIg
 };
 
+struct backgroud
+{
+	RectangleShape layer;
+	float x, y;
+};
+
+enum typeBttonIn
+{
+
+};
+
 class Ingame : public GameStatus
 {
 	private:
-		Entity** player;
-		unsigned int backLayersArrSize, playerArrSize;
-		RectangleShape* backgLayersArr;
 		void textureProcessor(String rute, textureType xd);
 		void initTextures();
 		void initPlayer(Texture* playerTexture, playerType xd);
 		void initMap();
 		FloatRect winSize;
-		
+		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, typeBttonIn xd);
 	public:
 		Ingame(GameStatus** estados, RenderWindow* ventana);
 		virtual ~Ingame();
@@ -44,6 +52,9 @@ class Ingame : public GameStatus
 		void checkKeyboardEvents(float deltaT) override;
 		void Update(float deltaT) override;
 		void updateMap();
+		void updateButtons();
+		Buttons* getButtons() override;
+		
 
 
 };

@@ -6,7 +6,7 @@ enum statsOrder
 {
 	x,y,hp, atkFisico,defFisica,atkMagico,defMagica, velocidad, totalStatsSize
 };
-struct Estadisticas
+struct estadisticas
 {
 	int x; int y;
 	int hp; int defMagica;
@@ -15,29 +15,39 @@ struct Estadisticas
 };
 
 
+
 class Entity : public EntityMethods
 {
 	protected:
-		//Movimiento
+		//Socket
 		IpAddress ip;
+		//Gestión de la información que se recibe-envia
+		string data, login;
+		unsigned int id;
+		bool checkDead, restart;
+		estadisticas stats;
+		static const short arrSize = 8;
+		int arrStats[arrSize];
+		const int totalPoints = 600;
+		Vector2f mousePos, coordinates;
+		//Movimiento
 		float speed;
 		Vector2f velocity;
-		Vector2f coordinates;
 		//Gestion del sprite de la entidad
 		unsigned int entitySize, entityAmount, checkSize;
 		unsigned int spriteWidth, spriteHeight;
 		Texture* entityTexture;
 		Sprite* entitySprite;
 		float elapsedT;
-		bool checkDead;
-		Estadisticas stats;
-		void init(int stats[]);
-		static const short arrSize = 8;
-		int arrStats[arrSize];
-		const int totalAllStatsAmount = 600;
+		//Gestion de los paquetes (envio y recepción de información)
+		friend Packet& operator<<(Packet& packet, Entity& entity);
+		friend Packet& operator>>(Packet& packet, Entity& entity);
+		friend ostream& operator<<(ostream& out, Entity& entity);
+
 	public:
 		Entity(Texture* entityTexture, float speed);
 		Entity();
+		void initStats(int stats[]);
 		virtual ~Entity();
 		
 		// METODOS
@@ -55,12 +65,15 @@ class Entity : public EntityMethods
 		virtual void render(RenderTarget* objTarget);
 		virtual void updateSprite(float deltaT, float switchT, int numS) override;
 		virtual void createSprite(Texture spriteTexture);
+		//Gestión de la entidad
 		void updateCharactState();
 		virtual void addDamage(int damage);
+		virtual void asignarEstadisticas(estadisticas& stats, int hpPercent, int defMagicaPercent, int defFisicaPercent,
+			int atkFisicoPercent, int atkMagicoPercent, int velocidadPercent);
+		virtual void variacionStats();
 
 		
 		//Getters and setters
-		/*Gestion de la textura y el sprite*/
 		Texture getEntityTexture(unsigned int numT) const;
 		Sprite getEntitySprite(unsigned int numS) const;
 		int getSpriteWidth() const;
@@ -76,14 +89,13 @@ class Entity : public EntityMethods
 		int getAtkMagico(); 
 		int getVelocidad();
 		IpAddress getIp();
-		Estadisticas* estadisticas();
+		void setIp(IpAddress ip);
+		void setLogin(string data);
+		string getLogin();
+		void setId(unsigned int id);
+		unsigned int getId();
 		bool isAlive();
-
-		friend Packet& operator<<(Packet& packet, Entity& entity);
-		friend Packet& operator>>(Packet& packet, Entity& entity);
-		
-		
-
+		estadisticas* getStats();
 		
 		
 };

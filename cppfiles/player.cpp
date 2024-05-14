@@ -24,6 +24,11 @@ Player::~Player()
 }
 
 
+void Player::asignarEstadisticas(estadisticas& stats, int hpPercent, int defMagicaPercent,
+	int defFisicaPercent, int atkFisicoPercent, int atkMagicoPercent, int velocidadPercent) {
+	Entity::asignarEstadisticas(stats, hpPercent, defMagicaPercent, defFisicaPercent, atkFisicoPercent, atkFisicoPercent, velocidadPercent);
+}
+
 
 
 /*void Player::setPosition(float xPos, float yPos)

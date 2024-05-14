@@ -13,7 +13,8 @@ Game::Game(unsigned int altoV = 0, unsigned int anchoV = 0, unsigned int framera
 	this->ventana->setVerticalSyncEnabled(true);
 	this->settings.antialiasingLevel = 16;
 	initStates();
-	this->currentEstadoIndex = this->estados->getEstadosArrSize() - 1;
+	this->currentEstadoIndex = this->estados[0]->getEstadosArrSize() - 1;
+	
 	
 }
 
@@ -32,7 +33,7 @@ void Game::render()
 		this->ventana->clear(Color::Yellow);
 		if(this->estados != nullptr)
 		{
-			this->estados->render(this->ventana);
+			this->estados[0]->render(this->ventana);
 		}
 		ventana->display();
 	}
@@ -50,19 +51,21 @@ void Game::updateState()
 	{
 		this->stateEvents();
 
-		if (this->currentEstadoIndex >= 0 && this->currentEstadoIndex < this->estados->getEstadosArrSize())
+		if (this->currentEstadoIndex >= 0 && this->currentEstadoIndex < this->estados[0]->getEstadosArrSize())
 		{
 			// Actualiza el estado actual
-			this->estados[this->currentEstadoIndex].Update(this->deltaT);
+			this->estados[this->currentEstadoIndex]->Update(this->deltaT);
+			
+			networkType();
 
 			// Verifica si el estado actual ha terminado
-			if (this->estados[this->currentEstadoIndex].getFin())
+			if (this->estados[this->currentEstadoIndex]->getFin())
 			{
 
-				this->estados[this->currentEstadoIndex].findEstado();
+				this->estados[this->currentEstadoIndex]->findEstado();
 
 				// Elimina el estado actual (en este caso, simplemente marca el estado como no activo)
-				this->estados[this->currentEstadoIndex].setActive(false);
+				this->estados[this->currentEstadoIndex]->setActive(false);
 
 				this->currentEstadoIndex--;
 
@@ -97,8 +100,11 @@ void Game::updateDeltaT()
 void Game::run()
 {
 	while (this->ventana->isOpen()) {
+		
 		this->updateDeltaT();
 		this->updateState();
+		/*this->recibirDatos();
+		this->enviarDatos();*/
 		this->render();
 	}
 }
@@ -159,13 +165,226 @@ void Game::initStates()
 	if (this->estados == nullptr)
 	{
 		unsigned int newArrSize = 1;
-		this->estados = new Menu(&this->estados, this->ventana);
-		this->estados->setEstadosArrSize(newArrSize);
+		this->estados = new GameStatus * [newArrSize];
+		this->estados[0] = new Menu(this->estados, this->ventana);
+		this->estados[0]->setEstadosArrSize(newArrSize);
+		this->estados[0]->setIsMenu(true);
+		
 	}
 }
 
-void Game::recibirDatos()
+void Game::initServer()
 {
-	IpAddress emisor;
+	// Create a server socket to accept new connections
+	bool isConnected = true;
+	const auto tries = 3;
+	const unsigned short port = 50002;
+	server = IpAddress::getLocalAddress();
+	for (auto connectionTry = 1; socket.bind(port,server) != Socket::Done; ++connectionTry)
+	{
+		cout << "Intentando bindear el puerto... Conectando..." << endl;
+		if(connectionTry >= tries)
+		{
+			cout << "No se pudo bindear el puerto" << endl;
+			isConnected = false;
+			break;
+		}
+	}
+
+		if(isConnected)
+		{
+			cout << "Servidor escuchando en el puerto: " << port << endl;
+		
+			cout << "IpServer: " << server << endl;
+			
+			isSocketServer = true;
+			socket.setBlocking(true);
+		}
+	
+	while(isConnected)
+	{
+		auto connection = Client{};
+		if(socket.receive(packet,connection.clientAdress,connection.port) == Socket::Done)
+		{
+			
+			Entity playerC;
+			string message;
+			packet >>  playerC;
+
+			cout << "Recibido de" << " ( " << connection.clientAdress.toString()  << ":" << connection.port << " ) " << endl << message << endl;
+			cout << "Estadisticas del cliente: " << playerC;
+
+			packet.clear();
+			getline(cin >> ws, message);
+			Entity playerS;
+			
+			if(message == "1")
+			{
+				playerS.asignarEstadisticas(*playerS.getStats(), 27, 10, 16, 26, 10, 11);
+				cout << "Antes de la variacion de -10_10%: " << endl << playerS;
+				playerS.variacionStats();
+				packet << playerS;
+			}
+			else if(message == "2")
+			{
+				playerS.asignarEstadisticas(*playerS.getStats(), 10, 16, 10, 11, 27, 26);
+				cout << "Antes de la variacion de -10_10%: " << playerS;
+				playerS.variacionStats();
+				packet << playerS;
+			}
+			
+			
+			if(socket.send(packet, connection.clientAdress, connection.port) == Socket::Done)
+			{
+				cout << "Mensaje enviado por el servidor a: " << " ( " << connection.clientAdress.toString() << ":" << connection.port << " ) " << endl<< message << endl;
+				cout << "Estadisticas enviadas por el servidor: " << playerS << endl;
+			}
+			else
+			{
+				cout << "No se pudo enviar el mensaje por el servidor a: " << " ( " << connection.clientAdress.toString() << ":" << connection.port << " ) " << endl;
+			}
+		}
+		else
+		{
+			sleep(milliseconds(100));
+		}
+	}
+	
 }
+
+
+void Game::initClient()
+{
+	const unsigned short port = 50002;
+	cout << "Digitar ip del servidor: ";
+	cin >> server;
+	cout << "Send message state" << endl;
+	auto state = CommunicationState::Send;
+	bool isConnected = true;
+	isSocketClient = true;
+	while(isConnected)
+	{
+		if(state == CommunicationState::Send)
+		{
+			string message;
+			packet.clear();
+			getline(cin >> ws, message);
+			Entity playerC;
+			if (message == "1")
+			{
+				playerC.asignarEstadisticas(*playerC.getStats(), 27, 10, 16, 26, 10, 11);
+				cout << "Antes de la variacion de -10_10%: " << playerC;
+				playerC.variacionStats();
+				packet << playerC;
+			}
+			else if (message == "2")
+			{
+				playerC.asignarEstadisticas(*playerC.getStats(), 10, 16, 10, 11, 27, 26);
+				cout << "Antes de la variacion de -10_10%: " << playerC;
+				playerC.variacionStats();
+				packet << playerC;
+			}
+			else
+			{
+				packet << message;
+			}
+			
+				
+			if (socket.send(packet, server, port) == Socket::Done)
+			{
+				cout << "Enviado a el servidor " << " ( " << server.toString() << ":" << port << " ) " << endl;
+				cout << "Enviadas la estadisticas: " << playerC << " al servidor" << endl;
+				state = CommunicationState::Receive;
+			}
+			else
+			{
+				cout << "No se pudo enviar el mensaje a el servidor: " << " ( " << server.toString() << ":" << port << " ) " << endl;
+			}
+
+		}
+		else
+		{
+			auto ipAdress = IpAddress{};
+			packet.clear();
+			unsigned short port = 0;
+			if(socket.receive(packet,ipAdress,port) == Socket::Done)
+			{
+				Entity playerS;
+				packet >> playerS;
+				cout << "Recibido de el servidor: ( " << ipAdress.toString() << ":" << port << " ) " << endl;
+				cout << " Estadisticas: " << playerS<< endl;
+				state = CommunicationState::Send;
+			}
+			else
+			{
+				cout << "No se pudo recibir el mensaje de parte del servidor" << endl;
+				state = CommunicationState::Send;
+				sleep(milliseconds(100));
+			}
+		}
+	}
+	
+	
+}
+
+void Game::recibirDatosS()
+{
+	
+}
+
+void Game::enviarDatosS()
+{
+}
+
+void Game::recibirDatosC()
+{
+
+}
+
+void Game::enviarDatosC()
+{
+	
+		
+}
+
+void Game::isServer()
+{
+	this->isSocketServer = true;
+}
+
+void Game::networkType()
+{
+	
+	if(this->estados[0]->getButtons() != nullptr && this->estados[0]->getIsMenu() == true)
+	{
+		Buttons* newButtons = this->estados[0]->getButtons();
+		if (newButtons[1].isPressed())
+		{
+
+			initServer();
+		}
+		else if (newButtons[2].isPressed())
+		{
+			initClient();
+		}
+	}
+	
+}
+
+IpAddress Game::getIpAdressServer()
+{
+	return this->server;
+}
+
+
+
+
+
+UdpSocket& Game::getSocket()
+{
+	return this->socket;
+}
+
+
+
 

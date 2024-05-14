@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "../doth/Buttons.h"
 
-Buttons::Buttons( float xPos ,  float yPos, float widht,float height, Font* font, Texture textureIdle,
+Buttons::Buttons( float xPos,  float yPos, float widht, float height, Font* font, Texture textureIdle,
 	Texture textureHover, Texture texturePressed)
 {
 	this->buttonBody.setSize(Vector2f(widht, height));
@@ -22,6 +22,12 @@ Buttons::Buttons( float xPos ,  float yPos, float widht,float height, Font* font
 
 
 Buttons::Buttons()
+{
+	this->buttonFont = nullptr;
+	this->buttonState = idle;
+}
+
+Buttons::~Buttons()
 {
 }
 
@@ -46,15 +52,20 @@ void Buttons::render(RenderTarget* drawObj)
 
 }
 
-bool Buttons::isPressed()
+const bool Buttons::isPressed() const
 {
-	if(this->buttonState == pressed)
-	{
-		return true;
+	try {
+		if (this != nullptr && this->buttonState == pressed) {
+			cout << buttonState << endl;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	else
-	{
-		return false;
+	catch (const std::exception& e) {
+		std::cout << e.what();
+		return false; 
 	}
 }
 
@@ -86,6 +97,7 @@ void Buttons::update(Vector2f mousePos)
 		break;
 	}
 }
+
 
 float Buttons::getButtonWidth()
 {

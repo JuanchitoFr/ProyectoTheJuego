@@ -8,12 +8,16 @@
 
 enum Textures : unsigned int 
 {
-	Backg_1, Backg_2, Backg_3, Backg_4, Backg_5, PlayButton, PlayBtton_Hover,PlayBtton_Pressed, Total_TexturesMn
+	Backg_1, Backg_2, Backg_3, Backg_4, Backg_5, PlayButtonT, 
+	PlayBtton_Hover,PlayBtton_Pressed, 
+	OtherButton, OtherButton_Hover_Pressed
+	, Total_TexturesMn
 };
 
 enum typeBtton: unsigned int
 {
-	playButtonT, exitButtonT
+	playButton, serverButton,clientButton,exitButtonT, Bttn_ShowCharacter1, Bttn_ShowCharacter2, Bttn_ShowCharacter3
+	,Bttn_ShowCharacter4
 };
 
 
@@ -22,16 +26,14 @@ enum typeBtton: unsigned int
 class Menu : public GameStatus
 {
 	private:
-		RectangleShape* backLayersArr;
-		Buttons* buttons;
-		RectangleShape* buttonArr;
+		
 		Font titleFont, textFont;
 		Text text, titleText;
 		Sprite titleSprite;
 		Vector2u currentWinSize;
 		
 		
-		unsigned short bttnState, backLayersArrSize, buttonArrSize;
+		unsigned short bttnState;
 		float elapsedT, elapsedT2, xPos,yPos, width, height;
 		void initFont();
 		void initBackground();
@@ -51,6 +53,8 @@ class Menu : public GameStatus
 		void checkKeyboardEvents(float deltaT) override;
 		void Update(float deltaT) override;
 		void updateButtons();
+		Buttons* getButtons() override;
+		
 };
 
 #endif // !MENU_H

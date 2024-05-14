@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "../doth/entity.h"
 
-void Entity::init(int stats[])
+void Entity::initStats(int stats[])
 {
 	if (arrSize > 0)
 	{
-		coordinates.x = stats[0];
-		coordinates.y = stats[1];
+		coordinates.x = (float)stats[0];
+		coordinates.y = (float)stats[1];
 		this->stats.x = (int)coordinates.x;
 		this->stats.y = (int)coordinates.y;
 		this->stats.hp = stats[2];
@@ -23,7 +23,6 @@ Entity::Entity(Texture* entityTexture = nullptr, float speed = 0.f) : entityText
 {
 	this->velocity = Vector2f(0.f, 0.f); this->coordinates = Vector2f(0.f, 0.f); this->elapsedT = 0.f; 
 	this->entitySprite = nullptr; this->spriteHeight = 0; this->spriteWidth = 0; this->checkDead = true;
-	
 	/*Tamaño de los array*/
 	this->entitySize = 0; this->entityAmount = 0; this->checkSize = 0;
 
@@ -37,6 +36,7 @@ Entity::Entity()
 	this->entitySprite = nullptr; this->entityTexture = nullptr;
 	this->spriteHeight = 0; this->spriteWidth = 0;
 	this-> checkDead = false;
+	
 }
 
 Entity::~Entity()
@@ -112,6 +112,37 @@ void Entity::addDamage(int damage)
 	 stats.hp -= damage;
 }
 
+void Entity::asignarEstadisticas(estadisticas& stats, int hpPercent, int defMagicaPercent, 
+	int defFisicaPercent, int atkFisicoPercent, int atkMagicoPercent, int velocidadPercent) {
+
+	// Calcula los puntos para cada estadística basados en los porcentajes
+	stats.hp = (totalPoints * hpPercent / 100);
+	stats.defMagica = totalPoints * defMagicaPercent / 100;
+	stats.defFisica = totalPoints * defFisicaPercent / 100;
+	stats.atkFisico = totalPoints * atkFisicoPercent / 100;
+	stats.atkMagico = totalPoints * atkMagicoPercent / 100;
+	stats.velocidad = totalPoints * velocidadPercent / 100;
+
+	
+}
+
+void Entity::variacionStats()
+{
+	// Aplica la aleatorización de +/- 10% a cada estadística
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<> dis(-10, 10);
+	cout << dis(gen);
+	stats.hp = static_cast<int>(stats.hp * (1.0 + static_cast<double>(dis(gen)) / 100.0));
+	stats.defMagica = static_cast<int>(stats.defMagica * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.defFisica = static_cast<int>(stats.defFisica * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.atkFisico = static_cast<int>(stats.atkFisico * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.atkMagico = static_cast<int>(stats.atkMagico * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.velocidad = static_cast<int>(stats.velocidad * (1.f + static_cast<float>(dis(gen)) / 100.f));
+
+
+
+}
 
 
 //Getters & setters
@@ -187,14 +218,34 @@ IpAddress Entity::getIp()
 	return ip;
 }
 
-Estadisticas* Entity::estadisticas()
+void Entity::setIp(IpAddress ip)
 {
-	return &stats;
+	this->ip = ip;
+}
+
+void Entity::setLogin(string data)
+{
+	this->data = data;
+}
+
+string Entity::getLogin()
+{
+	return this->login;
+}
+
+void Entity::setId(unsigned int id)
+{
+	this->id = id;
+}
+
+unsigned int Entity::getId()
+{
+	return this->id;
 }
 
 bool Entity::isAlive()
 {
-	if(stats.hp = 0)
+	if(stats.hp == 0)
 	{
 		return false;
 	}
@@ -202,6 +253,13 @@ bool Entity::isAlive()
 		return true;
 	}
 }
+
+estadisticas* Entity::getStats()
+{
+	return &stats;
+}
+
+
 
 
 unsigned int Entity::getEntitySize()
@@ -255,19 +313,28 @@ Packet& operator<<(Packet& packet, Entity& entity)
 		<< entity.stats.defFisica
 		<< entity.stats.atkMagico
 		<< entity.stats.defMagica
-		<< entity.stats.velocidad;
+		<< entity.stats.velocidad
+		<< entity.checkDead;
 	
 }
 
 Packet& operator>>(Packet& packet, Entity& entity)
 {
-	return packet
-		>> entity.coordinates.x
+	return packet >> entity.coordinates.x
 		>> entity.coordinates.y
 		>> entity.stats.hp
 		>> entity.stats.atkFisico
 		>> entity.stats.defFisica
 		>> entity.stats.atkMagico
 		>> entity.stats.defMagica
-		>> entity.stats.velocidad;
+		>> entity.stats.velocidad
+		>> entity.checkDead;
+}
+
+ostream& operator<<(ostream& out, Entity& entity)
+{
+	out << "Hp: " << "(hp normal)" << entity.stats.hp << " :(hp *2)" << entity.stats.hp * 2 << " atkFisico: " << entity.stats.atkFisico << " defFisica: " << entity.stats.defFisica
+		<< " atkMagico: " << entity.stats.atkMagico << " defMagica: " << entity.stats.defMagica << " Velocidad: " << entity.stats.velocidad << endl;
+
+	return out;
 }

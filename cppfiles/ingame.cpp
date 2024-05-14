@@ -5,10 +5,16 @@
 Ingame::Ingame(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr) : GameStatus(estados,ventana)
 {
 	cout << "Soy ingame" << endl;
+	this->buttons = nullptr;
 	initTextures();
 }
 Ingame::~Ingame()
 {
+}
+
+Buttons* Ingame::getButtons()
+{
+	return nullptr;
 }
 
 void Ingame::render(RenderTarget* drawObj)
@@ -20,7 +26,7 @@ void Ingame::render(RenderTarget* drawObj)
 		{
 			drawObj = this->ventana;
 		}
-		player[Dragon]->render(drawObj);
+		/*player[Dragon]->render(drawObj);*/
 		
 		/*drawObj->setView(View(winSize));*/
 		
@@ -54,6 +60,7 @@ void Ingame::checkKeyboardEvents(float deltaT)
 	{
 		this->estados[0] = new Menu(this->estados, this->ventana);
 		this->estados[0]->setEstadosArrSize(1);
+		this->estados[0]->setIsMenu(true);
 	}
 
 	/*if (this->player->getEntityMovement().x == 0.f && this->player->getEntityMovement().y == 0.f) {
@@ -75,6 +82,12 @@ void Ingame::Update(float deltaT)
 void Ingame::updateMap()
 {
 }
+
+void Ingame::updateButtons()
+{
+}
+
+
 
 
 void Ingame::textureProcessor(String rute, textureType xd)
@@ -141,35 +154,88 @@ void Ingame::initTextures()
 {
 	textureProcessor("assets/Spritesheets/free-rpg-monster-sprites-pixel-art/PNG/dragon/SpritesDragon.png", Dragon_T);
 	textureProcessor("assets/Spritesheets/free-rpg-monster-sprites-pixel-art/PNG/dragon/fireEffect.png", Dragon_FireEffect);
-	initPlayer(&textures[Dragon_T], Dragon);
-
+	/*initPlayer(&textures[Dragon_T], Dragon);*/
 }
+
+void Ingame::initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, typeBttonIn xd)
+{
+	try
+	{
+		if (this->buttonArrSize == 0 || this->buttons == nullptr)
+		{
+
+			buttonArrSize++;
+			buttons = new Buttons[buttonArrSize]();
+			/*buttonArr = new RectangleShape[buttonArrSize]();*/
+		}
+		else
+		{
+			if (xd >= buttonArrSize)
+			{
+				// Crear un nuevo array con el tamaño incrementado
+				unsigned int newSize = xd + 1;
+				Buttons* newArrayB = new Buttons[newSize]();
+				// Copiar las texturas del array original al nuevo array
+				for (unsigned int i = 0; i < buttonArrSize; i++) {
+					newArrayB[i] = buttons[i];
+				}
+				// Liberar la memoria del array original y asignar el nuevo array
+				delete[] buttons;
+				buttons = newArrayB;
+				// Actualizar el tamaño del array
+				buttonArrSize = newSize;
+			}
+		}
+		Vector2f bgSize(static_cast<float>(this->ventana->getSize().x),
+			static_cast<float>(this->ventana->getSize().y));
+		std::cout << "Tamaño: " << bgSize.x << " : " << bgSize.y << endl;
+		cout << textureIdle->getSize().x << " : " << textureHover->getSize().x << " : " << texturePressed->getSize().x << endl;
+		float width = static_cast<float>(this->buttons[xd].getTextureIdle().getSize().x);
+		float height = static_cast<float>(this->buttons[xd].getTextureIdle().getSize().y);
+		float xPos = static_cast<float>(this->ventana->getSize().x) / 2.41f;
+		float yPos = static_cast<float>(this->ventana->getSize().y) / 2.5f;
+		this->buttons[xd] = Buttons(xPos, yPos, width, height, NULL, *textureIdle, *textureHover, *texturePressed);
+		this->buttons[xd].setSize(328, 180);
+
+		/*this->buttonArr[xd].setSize(Vector2f(328, 180));*/
+		/*this->buttonArr[xd].setTexture(&texture);*/
+
+	}
+	catch (const std::exception& p)
+	{
+		cerr << "ERROR::FROM::INITLAYERS: " << p.what() << std::endl;
+	}
+}
+
 
 void Ingame::initPlayer(Texture* playerTexture, playerType xd)
 {
 	try
 	{
-			if (xd >= playerArrSize)
+		/*bool exit = true;
+		while(exit)
+		{
+			Entity* player = new Entity();
+			string opc;
+			cin >> opc;
+			if (opc == "1")
 			{
-				// Crear un nuevo array con el tamaño incrementado
-				unsigned int newSize = xd + 1;
-				Entity** newArrayB = new Entity*[newSize]();
-				// Copiar las texturas del array original al nuevo array
-				for (unsigned int i = 0; i < playerArrSize; i++) {
-					newArrayB[i] = player[i];
-				}
-				// Liberar la memoria del array original y asignar el nuevo array
-				delete[] player;
-				player = newArrayB;
-				// Actualizar el tamaño del array
-				playerArrSize = newSize;
+				player->asignarEstadisticas(*player->getStats(), 27, 10, 16, 26, 10, 11);
+				cout << "Antes de la variación: " << endl << *player;
+				player->variacionStats();
+				cout << "Después de la variación: " << endl << *player;
+
+				delete player;
 			}
-
-			Vector2f bgSize(static_cast<float>(this->ventana->getSize().x),
-				static_cast<float>(this->ventana->getSize().y));
-			std::cout << "Tamaño: " << bgSize.x << " : " << bgSize.y << endl;
-			this->player[xd] = new Player(playerTexture, 100.f, playerTexture->getSize().x, playerTexture->getSize().y);
-
+			else if (opc == "e")
+			{
+				exit = false;
+			}
+		}*/
+		
+			
+				
+			
 
 	}
 	catch (const std::exception& p)

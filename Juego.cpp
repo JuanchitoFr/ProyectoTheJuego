@@ -7,10 +7,11 @@
 
 int main()
 {
+    srand(time(0)); // Inicializa la semilla para generar números aleatorios
     Game Juego(1080, 1920, 60, "The game");
     Juego.run();
-
 }
+    
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 

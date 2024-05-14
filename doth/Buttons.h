@@ -17,12 +17,13 @@ private:
 public:
 	Buttons(float xPos, float yPos, float width, float heightFont, Font* font, Texture textureIdle,Texture textureHover,Texture texturePressed);
 	Buttons();
+	virtual ~Buttons();
 	void setPosition(float x, float y);
 	void setSize(float width, float height);
 	void render(RenderTarget* drawObj);
 	void update(Vector2f mousePos);
 	bool getButtonState();
-	bool isPressed();
+	const bool isPressed() const;
 	float getButtonWidth();
 	float getButtonHeight();
 	Texture getTextureIdle();

@@ -3,18 +3,25 @@
 
 
 #include "gamemethods.h"
+#include "Buttons.h"
+#include "entity.h"
+#include "player.h"
 
 
 class GameStatus : public GameMethods
 {
 	protected:
-		unsigned int textureArrSize, estadosArrSize;
+		unsigned int textureArrSize, estadosArrSize,backLayersArrSize, playerArrSize, buttonArrSize;
+		Buttons* buttons;
 		Texture* textures;
+		RectangleShape* backLayersArr;
+		Entity** player;
 		GameStatus** estados;
 		RenderWindow* ventana;
+		
 		Vector2i mousePosScreen, mousePosWindow;
 		Vector2f mousePosView;
-		bool fin, active;
+		bool fin, active, isMenu;
 	public:
 		GameStatus();
 		GameStatus(GameStatus** estados,RenderWindow* ventana);
@@ -34,7 +41,10 @@ class GameStatus : public GameMethods
 		virtual void updateMousePos() override;
 		/*Esto se encarga de actualizar la posición del mouse, segun el deltaT (El tiempo que se demora en renderizar cada frame el pc 
 		"Frame es como una escena, entonces seria el tiempo que se demora en generar cada escena del juego, como un storyboard" ).
-		Para ser mas específicos busquen sobre lo que contiene el método en la página de SFML :)*/
+		Para ser mas específicos busquen sobre lo que contiene los métodos que contiene el metodo en la página de SFML :)*/
+		virtual Buttons* getButtons() = 0;
+		virtual Entity* getPlayer(unsigned int i);
+		virtual unsigned int getAmoutPlayer();
 
 		// Gets and Sets
 		RenderWindow* getWindow();
@@ -46,6 +56,9 @@ class GameStatus : public GameMethods
 		bool getFin();
 		void findEstado();
 		void setActive(bool isActive);
+		void setPlayer(unsigned int num, Player* player);
+		bool getIsMenu();
+		void setIsMenu(bool menu);
 		
 };
 

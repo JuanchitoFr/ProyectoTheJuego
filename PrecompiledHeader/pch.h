@@ -9,9 +9,13 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
-#include <chrono>
 #include <random>
+#include <cstddef>
+#include <iomanip>
 #include <cstdlib>
+#include <ctime>
+#include <optional>
+#include <cmath>
 using namespace std;
 using namespace sf;
 #endif // !PCH_H

@@ -115,6 +115,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)sfml\include;$(SolutionDir)PrecompiledHeader</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,7 +156,10 @@
     <ClCompile Include="cppfiles\menu.cpp" />
     <ClCompile Include="cppfiles\player.cpp" />
     <ClCompile Include="Juego.cpp" />
-    <ClCompile Include="PrecompiledHeader\pch.cpp" />
+    <ClCompile Include="PrecompiledHeader\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="doth\Buttons.h" />
