@@ -165,7 +165,7 @@ void Game::initStates()
 	if (this->estados == nullptr)
 	{
 		unsigned int newArrSize = 1;
-		this->estados = new GameStatus * [newArrSize];
+		this->estados = new GameStatus *();
 		this->estados[0] = new Menu(this->estados, this->ventana);
 		this->estados[0]->setEstadosArrSize(newArrSize);
 		this->estados[0]->setIsMenu(true);
@@ -360,7 +360,6 @@ void Game::networkType()
 		Buttons* newButtons = this->estados[0]->getButtons();
 		if (newButtons[1].isPressed())
 		{
-
 			initServer();
 		}
 		else if (newButtons[2].isPressed())

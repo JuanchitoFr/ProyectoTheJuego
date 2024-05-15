@@ -7,8 +7,8 @@ Menu::Menu(GameStatus** estados = nullptr, RenderWindow* window = nullptr) : Gam
 
 	this->elapsedT = 0.f, elapsedT2 = 0.f; this->backLayersArr = 0; this->buttonArrSize = 0; this->xPos = 0;
 	this->yPos = 0; this->width = 0; this->height = 0; this->buttons = nullptr; this->backLayersArr = nullptr;
-	this->textures = nullptr;
-	initBackground();
+	this->textures = nullptr; this->sceneState = Menu_Principal; this->changeScene = false; this->opacidad = 1.f;
+	initBackground(); 
 	
 }
 
@@ -71,20 +71,46 @@ void Menu::render(RenderTarget* drawObj)
 	if (!drawObj) {
 		drawObj = this->ventana;
 	}
+
+	
 	drawObj->draw(this->backLayersArr[Backg_1]);
 	drawObj->draw(this->backLayersArr[Backg_3]);
-	if(this->buttons[playButton].isPressed())
+	
+	if (changeScene == true)
 	{
-		/*this->buttons[Bttn_ShowCharacter1].render(drawObj);
-		this->buttons[Bttn_ShowCharacter2].render(drawObj);
-		this->buttons[Bttn_ShowCharacter3].render(drawObj);
-		this->buttons[Bttn_ShowCharacter4].render(drawObj);*/
-	}
-	else
+		// Si ha pasado suficiente tiempo, establecer pantallaNegra en false
+		// Limpiar la ventana de renderizado (pintarla de negro con opacidad)
+		blackOverlay.setFillColor(Color(0, 0, 0, static_cast<sf::Uint8>(opacidad * 255)));
+		blackOverlay.setSize(Vector2f((float)this->ventana->getSize().x, (float)this->ventana->getSize().y));
+		drawObj->draw(blackOverlay);
+
+		// Reducir gradualmente la opacidad
+		opacidad -= 0.9f * deltaT; 
+
+		// Si la opacidad es menor o igual a cero, establecer pantallaNegra en false
+		if (opacidad <= 0.0f) {
+			changeScene = false;
+			opacidad = 1.f;
+		}
+		
+	}else
 	{
-		this->buttons[playButton].render(drawObj);
-		this->buttons[serverButton].render(drawObj);
-		this->buttons[clientButton].render(drawObj);
+		if (this->sceneState == Seleccion)
+		{
+		
+			this->buttons[Bttn_ShowCharacter1].render(drawObj);
+			this->buttons[Bttn_ShowCharacter2].render(drawObj);
+			this->buttons[Bttn_ShowCharacter3].render(drawObj);
+			this->buttons[Bttn_ShowCharacter4].render(drawObj);
+			drawObj->draw(sprites[0]);
+		}
+		else if (this->sceneState == Menu_Principal)
+		{
+			this->buttons[playButton].render(drawObj);
+			this->buttons[serverButton].render(drawObj);
+			this->buttons[clientButton].render(drawObj);
+			
+		}
 	}
 	
 	
@@ -92,7 +118,11 @@ void Menu::render(RenderTarget* drawObj)
 
 void Menu::checkKeyboardEvents(float deltaT)
 {
-	
+	if (Keyboard::isKeyPressed(Keyboard::Home))
+	{
+		this->sceneState = Menu_Principal;
+		this->changeScene = true;
+	}
 }
 
 
@@ -100,6 +130,8 @@ void Menu::checkKeyboardEvents(float deltaT)
 void Menu::Update(float deltaT)
 {
 	/*cout << "Estoy en update de menu" << endl;*/
+	checkKeyboardEvents(deltaT);
+	this->deltaT = deltaT;
 	this->updateMousePos();
 	this->updateButtons();
 	this->updateBackgroundTexture(deltaT, 48.f, 0.4f);
@@ -120,7 +152,8 @@ void Menu::updateButtons()
 			if (this->buttons[playButton].isPressed() == true && this != nullptr)
 			{
 				cout << "Presione play" << endl;
-				
+				this->sceneState = Seleccion;
+				this->changeScene = true;
 				/*this->estados[0] = new Ingame(this->estados, this->ventana);
 				this->estados[0]->setIsMenu(false);
 				this->estados[0]->setEstadosArrSize(1);*/
@@ -171,6 +204,7 @@ void Menu::initBackground()
 	textureProcessor("assets/ui/Uibasic/Sprite_sheets/button0-1.png", PlayBtton_Pressed);
 	textureProcessor("assets/ui/Uibasic/Sprite_sheets/button0.png", OtherButton);
 	textureProcessor("assets/ui/Uibasic/Sprite_sheets/button0-1.png", OtherButton_Hover_Pressed);
+	textureProcessor("assets/Spritesheets/free-rpg-monster-sprites-pixel-art/PNG/dragon/SpritesDragon.png", Dragon_Texture);
 	initLayers(textures[Backg_1], Backg_1);
 	initLayers(textures[Backg_2], Backg_2);
 	initLayers(textures[Backg_3], Backg_3);
@@ -188,7 +222,22 @@ void Menu::initBackground()
 		this->buttons[playButton].getButtonBody().getPosition().x, this->buttons[playButton].getButtonBody().getPosition().y / 0.7f);
 	this->buttons[clientButton].setPosition(
 		this->buttons[playButton].getButtonBody().getPosition().x, this->buttons[serverButton].getButtonBody().getPosition().y / 0.76f);
-	
+	this->buttons[Bttn_ShowCharacter1].setPosition((float)this->ventana->getSize().x / 10.f,(float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y);
+	this->buttons[Bttn_ShowCharacter2].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 3.2f, (float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y);
+	this->buttons[Bttn_ShowCharacter3].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 5.2f, (float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y);
+	this->buttons[Bttn_ShowCharacter4].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 7.4f, (float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y);
+	for (unsigned int i = Bttn_ShowCharacter1; i <= Bttn_ShowCharacter4; i++)
+	{
+		this->buttons[i].setSize(328, 828);
+	}
+	this->sprites[0].setTexture(this->textures[Dragon_Texture]);
+	this->sprites[0].setTextureRect(IntRect(0, 0, (int)this->textures[Dragon_Texture].getSize().x / 5, (int)this->textures[Dragon_Texture].getSize().y / 4));
+	this->sprites[0].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 1.05f,
+		(float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y / 1.28f);
+	/*this->buttons[Bttn_ShowCharacter1].setSize();
+	this->buttons[Bttn_ShowCharacter2]
+	this->buttons[Bttn_ShowCharacter3]
+	this->buttons[Bttn_ShowCharacter4]*/
 }
 
 void Menu::initLayers(Texture& texture, Textures xd)

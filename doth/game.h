@@ -68,6 +68,7 @@ class Game
 		void initServer();
 			/*Inicializa un servidor*/
 		void initClient();
+		//De prueba estas funciones, se pueden o no eliminar luego
 			/*Recepcion de datos por parte del servidor*/
 		void recibirDatosS();
 			/*Envio de datos por parte del servidor*/

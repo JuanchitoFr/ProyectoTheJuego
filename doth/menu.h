@@ -11,7 +11,7 @@ enum Textures : unsigned int
 	Backg_1, Backg_2, Backg_3, Backg_4, Backg_5, PlayButtonT, 
 	PlayBtton_Hover,PlayBtton_Pressed, 
 	OtherButton, OtherButton_Hover_Pressed
-	, Total_TexturesMn
+	, Dragon_Texture ,Total_TexturesMn
 };
 
 enum typeBtton: unsigned int
@@ -20,21 +20,27 @@ enum typeBtton: unsigned int
 	,Bttn_ShowCharacter4
 };
 
+enum escenas
+{
+	Menu_Principal, Seleccion
+}; 
+
 
 
 
 class Menu : public GameStatus
 {
 	private:
-		
+		Sprite sprites[4];
 		Font titleFont, textFont;
 		Text text, titleText;
 		Sprite titleSprite;
+		Clock clock;
+		bool changeScene;
 		Vector2u currentWinSize;
-		
-		
-		unsigned short bttnState;
-		float elapsedT, elapsedT2, xPos,yPos, width, height;
+		unsigned short bttnState, sceneState;
+		float elapsedT, elapsedT2, xPos,yPos, width, height, opacidad, deltaT;
+		RectangleShape blackOverlay;
 		void initFont();
 		void initBackground();
 		void initLayers(Texture& texture, Textures xd);
