@@ -3,7 +3,7 @@
 
 enum btnStates : unsigned short{idle = 0, hover, pressed};
 
-
+//En esta clase se gestionan los botones, pueden implementar una que gestione en si toda la interfaz ya sea en el menu o ingame.
 class Buttons
 {
 private:

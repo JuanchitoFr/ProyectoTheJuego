@@ -2,6 +2,7 @@
 #define PLAYER_H
 #include "entity.h"
 
+//Clase del jugador, pueden implementarla utilizando polimorfismo con la de entity mediante punteros
 class Player : public Entity 
 {
 private:

@@ -7,6 +7,7 @@
 #include "entity.h"
 #include "player.h"
 
+//Clase base de la cual derivan los 2 estados Menu y Ingame
 
 class GameStatus : public GameMethods
 {

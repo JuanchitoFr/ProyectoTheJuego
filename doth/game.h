@@ -24,6 +24,7 @@ namespace
 	};
 }
 
+//Bucle del juego, aqui va todo lo esencial de lo que hagan en menu o ingame.
 class Game
 {
 	private:
@@ -52,23 +53,24 @@ class Game
 		//Gestión juego
 			/*Renderiza de acuerdo al estado existente en el momento*/
 		void render();
-			/*Actualiza el estado*/
+			/*Actualiza el estado (eventos o si ya finalizo este mismo)*/
 		void updateState();
 			/*Inicializa y actualiza el deltaTime*/
 		void updateDeltaT();
-			/*Inicializa el juego*/
+			/*Inicializa el juego, bucle principal*/
 		void run();
 			/*Inicializa los eventos del estado*/
 		void stateEvents();
-			/*Inicializa un estado*/
+			/*Inicializa un estado, pasandole la dirección de memoria de un estado/
 		void initStates();
 
+		//Experimental
 		//Gestión Sockets
 			/*Inicializa un cliente*/
 		void initServer();
 			/*Inicializa un servidor*/
 		void initClient();
-		//De prueba estas funciones, se pueden o no eliminar luego
+		//De prueba estas funciones de los sockets, se pueden o no eliminar luego
 			/*Recepcion de datos por parte del servidor*/
 		void recibirDatosS();
 			/*Envio de datos por parte del servidor*/

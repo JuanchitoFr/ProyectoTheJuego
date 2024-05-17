@@ -36,6 +36,7 @@ enum typeBttonIn
 
 };
 
+// Estado ya en el juego
 class Ingame : public GameStatus
 {
 	private:

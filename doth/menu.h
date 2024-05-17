@@ -26,7 +26,7 @@ enum escenas
 }; 
 
 
-
+//Menu principal
 
 class Menu : public GameStatus
 {

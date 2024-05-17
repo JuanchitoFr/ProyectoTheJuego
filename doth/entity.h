@@ -67,9 +67,12 @@ class Entity : public EntityMethods
 		virtual void createSprite(Texture spriteTexture);
 		//Gestión de la entidad
 		void updateCharactState();
+		 /*Controlar el daño -experimental-*/
 		virtual void addDamage(int damage);
+		/*Asignar  estadisticas*/
 		virtual void asignarEstadisticas(estadisticas& stats, int hpPercent, int defMagicaPercent, int defFisicaPercent,
 			int atkFisicoPercent, int atkMagicoPercent, int velocidadPercent);
+		/*Aleatorizar el aumento de 10% o -10% de lasestadisticas*/
 		virtual void variacionStats();
 
 		
