@@ -1,4 +1,4 @@
-#include "pch.h"
+	#include "pch.h"
 #include "../doth/entity.h"
 
 void Entity::initStats(int stats[])
