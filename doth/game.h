@@ -61,7 +61,7 @@ class Game
 		void run();
 			/*Inicializa los eventos del estado*/
 		void stateEvents();
-			/*Inicializa un estado, pasandole la dirección de memoria de un estado/
+			/*Inicializa un estado, pasandole la dirección de memoria de un estado*/
 		void initStates();
 
 		//Experimental
