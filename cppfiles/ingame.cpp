@@ -157,7 +157,7 @@ void Ingame::initTextures()
 	/*initPlayer(&textures[Dragon_T], Dragon);*/
 }
 
-void Ingame::initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, typeBttonIn xd)
+void Ingame::initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, string text, typeBttonIn xd)
 {
 	try
 	{
@@ -194,7 +194,7 @@ void Ingame::initBtton(Texture* textureIdle, Texture* textureHover, Texture* tex
 		float height = static_cast<float>(this->buttons[xd].getTextureIdle().getSize().y);
 		float xPos = static_cast<float>(this->ventana->getSize().x) / 2.41f;
 		float yPos = static_cast<float>(this->ventana->getSize().y) / 2.5f;
-		this->buttons[xd] = Buttons(xPos, yPos, width, height, NULL, *textureIdle, *textureHover, *texturePressed);
+		this->buttons[xd] = Buttons(xPos, yPos, width, height, NULL, text, *textureIdle, *textureHover, *texturePressed);
 		this->buttons[xd].setSize(328, 180);
 
 		/*this->buttonArr[xd].setSize(Vector2f(328, 180));*/

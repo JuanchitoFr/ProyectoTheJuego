@@ -17,7 +17,7 @@ enum Textures : unsigned int
 enum typeBtton: unsigned int
 {
 	playButton, serverButton,clientButton,exitButtonT, Bttn_ShowCharacter1, Bttn_ShowCharacter2, Bttn_ShowCharacter3
-	,Bttn_ShowCharacter4
+	,Bttn_ShowCharacter4, Total_TypeBttons
 };
 
 enum escenas
@@ -33,7 +33,8 @@ class Menu : public GameStatus
 	private:
 		Sprite sprites[4];
 		Font titleFont, textFont;
-		Text text, titleText;
+		Text titleText;
+		Text* text;
 		Sprite titleSprite;
 		Clock clock;
 		bool changeScene;
@@ -44,7 +45,7 @@ class Menu : public GameStatus
 		void initFont();
 		void initBackground();
 		void initLayers(Texture& texture, Textures xd);
-		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, typeBtton xd);
+		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, string text, typeBtton xd);
 		void textureProcessor(String rute, Textures xd);
 		
 		

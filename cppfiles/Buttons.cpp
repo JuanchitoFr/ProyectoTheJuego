@@ -1,16 +1,18 @@
 #include "pch.h"
 #include "../doth/Buttons.h"
 
-Buttons::Buttons( float xPos,  float yPos, float widht, float height, Font* font, Texture textureIdle,
+Buttons::Buttons( float xPos,  float yPos, float widht, float height, Font* font, string text , Texture textureIdle,
 	Texture textureHover, Texture texturePressed)
 {
 	this->buttonBody.setSize(Vector2f(widht, height));
 	this->buttonBody.setPosition(Vector2f(xPos, yPos));
 	this->buttonFont = font;
 	this->buttonText.setFont(*buttonFont);
+	this->buttonText.setString(text);
 	this->buttonText.setCharacterSize(20);
 	this->buttonText.setOutlineColor(Color::Black);
 	this->buttonText.setOutlineThickness(2.f);
+	this->buttonText.setFillColor(Color::Yellow);
 
 	this->textureIdle = textureIdle;
 	this->textureHover = textureHover;
@@ -18,6 +20,8 @@ Buttons::Buttons( float xPos,  float yPos, float widht, float height, Font* font
 
 	this->buttonBody.setTexture(&textureIdle);
 	this->buttonState = idle;
+	this->visible = true;
+	centerText();
 }
 
 
@@ -47,12 +51,18 @@ bool Buttons::getButtonState()
 
 void Buttons::render(RenderTarget* drawObj)
 {
-	drawObj->draw(buttonBody);
+	if(isVisible() == true)
+	{
+		drawObj->draw(buttonBody);
+		drawObj->draw(buttonText);
+	}
+	
+	
 	/*drawObj->draw(buttonText);*/
 
 }
 
-const bool Buttons::isPressed() const
+bool Buttons::isPressed() const
 {
 	try {
 		if (this != nullptr && this->buttonState == pressed) {
@@ -68,16 +78,34 @@ const bool Buttons::isPressed() const
 		return false; 
 	}
 }
+bool Buttons::isVisible() const
+{
+	if(visible == true)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+void Buttons::setVisible(bool visible)
+{
+	this->visible = visible;
+}
 
 void Buttons::update(Vector2f mousePos)
 {
 	this->buttonState = idle;
-	if(this->buttonBody.getGlobalBounds().contains(mousePos))
+	if (isVisible() == true) 
 	{
-		this->buttonState = hover;
-		if(Mouse::isButtonPressed(Mouse::Left))
+		if (this->buttonBody.getGlobalBounds().contains(mousePos))
 		{
-			this->buttonState = pressed;
+
+			this->buttonState = hover;
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				this->buttonState = pressed;
+			}
 		}
 	}
 
@@ -128,6 +156,22 @@ RectangleShape Buttons::getButtonBody()
 	return this->buttonBody;
 }
 
+Text Buttons::getBttonText()
+{
+	return this->buttonText;
+}
 
 
+void Buttons::centerText()
+{
+	FloatRect rectBounds = this->buttonBody.getGlobalBounds();
+	float rectWidth = rectBounds.width;
+	float rectHeight = rectBounds.height;
+	FloatRect textBounds = this->buttonText.getLocalBounds();
+	float textoX = (rectBounds.left + (rectWidth / 2.f) - (textBounds.width / 2.f) - textBounds.left);
+	float textoY = (rectBounds.top + (rectHeight / 2.f) - (textBounds.height / 2.f) - textBounds.top);
+
+	this->buttonText.setPosition(textoX, textoY);
+
+}
 

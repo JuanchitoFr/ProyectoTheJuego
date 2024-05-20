@@ -45,7 +45,7 @@ class Ingame : public GameStatus
 		void initPlayer(Texture* playerTexture, playerType xd);
 		void initMap();
 		FloatRect winSize;
-		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, typeBttonIn xd);
+		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, string text, typeBttonIn xd);
 	public:
 		Ingame(GameStatus** estados, RenderWindow* ventana);
 		virtual ~Ingame();

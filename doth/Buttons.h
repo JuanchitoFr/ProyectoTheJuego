@@ -6,7 +6,7 @@ enum btnStates : unsigned short{idle = 0, hover, pressed};
 //En esta clase se gestionan los botones, pueden implementar una que gestione en si toda la interfaz ya sea en el menu o ingame.
 class Buttons
 {
-private:
+	private:
 	unsigned short buttonState;
 	RectangleShape buttonBody;
 	Font* buttonFont;
@@ -14,8 +14,11 @@ private:
 	Texture textureIdle;
 	Texture textureHover;
 	Texture texturePressed;
-public:
-	Buttons(float xPos, float yPos, float width, float heightFont, Font* font, Texture textureIdle,Texture textureHover,Texture texturePressed);
+	bool visible;
+
+	public:
+
+	Buttons(float xPos, float yPos, float width, float heightFont, Font* font, string text, Texture textureIdle,Texture textureHover,Texture texturePressed);
 	Buttons();
 	virtual ~Buttons();
 	void setPosition(float x, float y);
@@ -23,13 +26,17 @@ public:
 	void render(RenderTarget* drawObj);
 	void update(Vector2f mousePos);
 	bool getButtonState();
-	const bool isPressed() const;
+	bool isPressed() const;
+	bool isVisible() const;
+	void setVisible(bool visible);
 	float getButtonWidth();
 	float getButtonHeight();
 	Texture getTextureIdle();
 	Texture getTextureHover();
 	Texture getTexturePressed();
 	RectangleShape getButtonBody();
+	Text getBttonText();
+	void centerText();
 
 
 };

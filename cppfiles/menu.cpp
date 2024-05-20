@@ -8,6 +8,7 @@ Menu::Menu(GameStatus** estados = nullptr, RenderWindow* window = nullptr) : Gam
 	this->elapsedT = 0.f, elapsedT2 = 0.f; this->backLayersArr = 0; this->buttonArrSize = 0; this->xPos = 0;
 	this->yPos = 0; this->width = 0; this->height = 0; this->buttons = nullptr; this->backLayersArr = nullptr;
 	this->textures = nullptr; this->sceneState = Menu_Principal; this->changeScene = false; this->opacidad = 1.f;
+	initFont();
 	initBackground(); 
 	
 }
@@ -121,6 +122,14 @@ void Menu::checkKeyboardEvents(float deltaT)
 	if (Keyboard::isKeyPressed(Keyboard::Home))
 	{
 		this->sceneState = Menu_Principal;
+		for (size_t i = Bttn_ShowCharacter1; i < Total_TypeBttons; i++)
+		{
+			this->buttons[i].setVisible(false);
+		}
+		for (size_t i = playButton; i < Bttn_ShowCharacter1; i++)
+		{
+			this->buttons[i].setVisible(true);
+		}
 		this->changeScene = true;
 	}
 }
@@ -135,7 +144,11 @@ void Menu::Update(float deltaT)
 	this->updateMousePos();
 	this->updateButtons();
 	this->updateBackgroundTexture(deltaT, 48.f, 0.4f);
-	/*std::cout << "X pos: " << mousePosView.x << " " << "Y pos: " << mousePosView.y << std::endl;*/
+	if(Keyboard::isKeyPressed(Keyboard::Tab))
+	{
+		std::cout << "X pos: " << mousePosView.x << " " << "Y pos: " << mousePosView.y << std::endl;
+	}
+	
 }
 
 void Menu::updateButtons()
@@ -152,6 +165,14 @@ void Menu::updateButtons()
 			if (this->buttons[playButton].isPressed() == true && this != nullptr)
 			{
 				cout << "Presione play" << endl;
+				for (size_t i = playButton; i < clientButton; i++)
+				{
+					this->buttons[i].setVisible(false);
+				}
+				for (size_t i = Bttn_ShowCharacter1; i < Total_TypeBttons; i++)
+				{
+					this->buttons[i].setVisible(true);
+				}
 				this->sceneState = Seleccion;
 				this->changeScene = true;
 				/*this->estados[0] = new Ingame(this->estados, this->ventana);
@@ -186,7 +207,7 @@ Buttons* Menu::getButtons()
 
 void Menu::initFont()
 {
-	if (!this->titleFont.loadFromFile("assets/ui/pricedown/pricedown_bl.otf"))
+	if (!this->titleFont.loadFromFile("assets/ui/Fuente/pricedown/pricedown_bl.otf"))
 	{
 		cerr << "ERROR::MENU::INITFONT: No se pudo cargar la fuente" << endl;
 	}
@@ -205,19 +226,26 @@ void Menu::initBackground()
 	textureProcessor("assets/ui/Uibasic/Sprite_sheets/button0.png", OtherButton);
 	textureProcessor("assets/ui/Uibasic/Sprite_sheets/button0-1.png", OtherButton_Hover_Pressed);
 	textureProcessor("assets/Spritesheets/free-rpg-monster-sprites-pixel-art/PNG/dragon/SpritesDragon.png", Dragon_Texture);
+
+
+	//Capas de fondo
+
 	initLayers(textures[Backg_1], Backg_1);
 	initLayers(textures[Backg_2], Backg_2);
 	initLayers(textures[Backg_3], Backg_3);
 	initLayers(textures[Backg_4], Backg_4);
 	initLayers(textures[Backg_5], Backg_5);
-	initBtton(&textures[PlayButtonT], &textures[PlayBtton_Hover], &textures[PlayBtton_Pressed],playButton);
-	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], serverButton);
-	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], clientButton);
-	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], Bttn_ShowCharacter1);
-	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], Bttn_ShowCharacter2);
-	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], Bttn_ShowCharacter3);
-	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], Bttn_ShowCharacter4);
-	/*this->buttonArr[playButton].setPosition(static_cast<float>(this->ventana->getSize().x) / 2.35f,static_cast<float>(this->ventana->getSize().y) / 2.22f);*/
+
+	//Botones
+
+	initBtton(&textures[PlayButtonT], &textures[PlayBtton_Hover], &textures[PlayBtton_Pressed], "Jugar", playButton);
+	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], "Conectarse como servidor" ,serverButton);
+	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], "Conectarse como cliente",clientButton);
+	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], "",Bttn_ShowCharacter1);
+	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], "",Bttn_ShowCharacter2);
+	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], "",Bttn_ShowCharacter3);
+	initBtton(&textures[OtherButton], &textures[OtherButton_Hover_Pressed], &textures[OtherButton_Hover_Pressed], "", Bttn_ShowCharacter4);
+	
 	this->buttons[serverButton].setPosition(
 		this->buttons[playButton].getButtonBody().getPosition().x, this->buttons[playButton].getButtonBody().getPosition().y / 0.7f);
 	this->buttons[clientButton].setPosition(
@@ -226,10 +254,12 @@ void Menu::initBackground()
 	this->buttons[Bttn_ShowCharacter2].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 3.2f, (float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y);
 	this->buttons[Bttn_ShowCharacter3].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 5.2f, (float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y);
 	this->buttons[Bttn_ShowCharacter4].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 7.4f, (float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().y);
+	
 	for (unsigned int i = Bttn_ShowCharacter1; i <= Bttn_ShowCharacter4; i++)
 	{
 		this->buttons[i].setSize(328, 828);
 	}
+
 	this->sprites[0].setTexture(this->textures[Dragon_Texture]);
 	this->sprites[0].setTextureRect(IntRect(0, 0, (int)this->textures[Dragon_Texture].getSize().x / 5, (int)this->textures[Dragon_Texture].getSize().y / 4));
 	this->sprites[0].setPosition((float)this->buttons[Bttn_ShowCharacter1].getButtonBody().getPosition().x * 1.05f,
@@ -238,6 +268,8 @@ void Menu::initBackground()
 	this->buttons[Bttn_ShowCharacter2]
 	this->buttons[Bttn_ShowCharacter3]
 	this->buttons[Bttn_ShowCharacter4]*/
+
+
 }
 
 void Menu::initLayers(Texture& texture, Textures xd)
@@ -281,7 +313,7 @@ void Menu::initLayers(Texture& texture, Textures xd)
 	}
 }
 
-void Menu::initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, typeBtton xd)
+void Menu::initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, string text, typeBtton xd)
 {
 	try
 	{
@@ -318,7 +350,7 @@ void Menu::initBtton(Texture* textureIdle, Texture* textureHover, Texture* textu
 		this->height = static_cast<float>(this->buttons[xd].getTextureIdle().getSize().y);
 		this->xPos = static_cast<float>(this->ventana->getSize().x) / 2.41f;
 		this->yPos = static_cast<float>(this->ventana->getSize().y) / 2.5f;
-		this->buttons[xd] = Buttons(xPos,yPos,width,height,&titleFont, *textureIdle, *textureHover, *texturePressed);
+		this->buttons[xd] = Buttons(xPos,yPos,width,height,&titleFont, text, *textureIdle, *textureHover, *texturePressed);
 		this->buttons[xd].setSize(328, 180);
 		
 		/*this->buttonArr[xd].setSize(Vector2f(328, 180));*/
