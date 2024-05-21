@@ -18,66 +18,78 @@
     <ClCompile Include="Juego.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cppfiles\entity.cpp">
+    <ClCompile Include="source\Player\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cppfiles\game.cpp">
+    <ClCompile Include="source\Main\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cppfiles\gamemethods.cpp">
+    <ClCompile Include="source\Escenas-Estados\GameStatus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cppfiles\gamestatus.cpp">
+    <ClCompile Include="source\Escenas-Estados\Ingame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cppfiles\ingame.cpp">
+    <ClCompile Include="source\Escenas-Estados\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cppfiles\menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cppfiles\player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cppfiles\entitymethods.cpp">
+    <ClCompile Include="source\Player\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PrecompiledHeader\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cppfiles\Buttons.cpp">
+    <ClCompile Include="source\Gui\Gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameLoop\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Componentes\Hitbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Gui\PausaMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="doth\entity.h">
+    <ClInclude Include="source\Player\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doth\game.h">
+    <ClInclude Include="source\Main\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doth\gamemethods.h">
+    <ClInclude Include="source\Escenas-Estados\GameStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doth\gamestatus.h">
+    <ClInclude Include="source\Escenas-Estados\Ingame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doth\ingame.h">
+    <ClInclude Include="source\Escenas-Estados\Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doth\menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="doth\player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="doth\entitymethods.h">
+    <ClInclude Include="source\Player\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PrecompiledHeader\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="doth\Buttons.h">
+    <ClInclude Include="source\Gui\Gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Componentes\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gui\TileMapGestor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameLoop\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Componentes\Hitbox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Gui\PausaMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

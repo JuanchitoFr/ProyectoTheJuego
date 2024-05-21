@@ -2,12 +2,11 @@
 //
 
 #include <pch.h>
-#include <../doth/game.h>
+#include <../source/GameLoop/game.h>
 
 
 int main()
 {
-    srand(time(0)); // Inicializa la semilla para generar números aleatorios
     Game Juego(1080, 1920, 60, "The game");
     Juego.run();
 }

@@ -146,15 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cppfiles\Buttons.cpp" />
-    <ClCompile Include="cppfiles\entity.cpp" />
-    <ClCompile Include="cppfiles\entitymethods.cpp" />
-    <ClCompile Include="cppfiles\game.cpp" />
-    <ClCompile Include="cppfiles\gamemethods.cpp" />
-    <ClCompile Include="cppfiles\gamestatus.cpp" />
-    <ClCompile Include="cppfiles\ingame.cpp" />
-    <ClCompile Include="cppfiles\menu.cpp" />
-    <ClCompile Include="cppfiles\player.cpp" />
+    <ClCompile Include="source\Gui\PausaMenu.cpp" />
+    <ClCompile Include="source\Componentes\Hitbox.cpp" />
+    <ClCompile Include="source\GameLoop\Game.cpp" />
+    <ClCompile Include="source\Gui\Gui.cpp" />
+    <ClCompile Include="source\Player\Entity.cpp" />
+    <ClCompile Include="source\Main\Game.cpp" />
+    <ClCompile Include="source\Escenas-Estados\GameStatus.cpp" />
+    <ClCompile Include="source\Escenas-Estados\Ingame.cpp" />
+    <ClCompile Include="source\Escenas-Estados\Menu.cpp" />
+    <ClCompile Include="source\Player\Player.cpp" />
     <ClCompile Include="Juego.cpp" />
     <ClCompile Include="PrecompiledHeader\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -162,15 +163,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="doth\Buttons.h" />
-    <ClInclude Include="doth\entity.h" />
-    <ClInclude Include="doth\game.h" />
-    <ClInclude Include="doth\gamemethods.h" />
-    <ClInclude Include="doth\gamestatus.h" />
-    <ClInclude Include="doth\ingame.h" />
-    <ClInclude Include="doth\menu.h" />
-    <ClInclude Include="doth\player.h" />
-    <ClInclude Include="doth\entitymethods.h" />
+    <ClInclude Include="source\Gui\PausaMenu.h" />
+    <ClInclude Include="source\Componentes\Hitbox.h" />
+    <ClInclude Include="source\Componentes\Animation.h" />
+    <ClInclude Include="source\GameLoop\Game.h" />
+    <ClInclude Include="source\Gui\Gui.h" />
+    <ClInclude Include="source\Player\Entity.h" />
+    <ClInclude Include="source\Main\Game.h" />
+    <ClInclude Include="source\Escenas-Estados\GameStatus.h" />
+    <ClInclude Include="source\Escenas-Estados\Ingame.h" />
+    <ClInclude Include="source\Escenas-Estados\Menu.h" />
+    <ClInclude Include="source\Player\Player.h" />
+    <ClInclude Include="source\Gui\TileMapGestor.h" />
     <ClInclude Include="PrecompiledHeader\pch.h" />
   </ItemGroup>
   <ItemGroup>
