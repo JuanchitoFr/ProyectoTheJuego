@@ -21,7 +21,7 @@ enum Estados
 class GameStatus
 {
 	protected:
-		unsigned int textureArrSize, estadosArrSize,backLayersArrSize, playerArrSize, buttonArrSize;
+		unsigned int textureArrSize, estadosArrSize,backLayersArrSize, playerArrSize, buttonArrSize, characterChosen;
 		Gui::Buttons* buttons;
 		Texture* textures;
 		RectangleShape* backLayersArr;
@@ -31,7 +31,7 @@ class GameStatus
 		
 		Vector2i mousePosScreen, mousePosWindow;
 		Vector2f mousePosView;
-		bool fin, active, isMenu;
+		bool fin, active, isMenu, paused;
 	public:
 		GameStatus();
 		GameStatus(GameStatus** estados,RenderWindow* ventana);
@@ -66,10 +66,13 @@ class GameStatus
 		unsigned int setEstadosArrSize(unsigned int arrSize);
 		bool getFin();
 		void findEstado();
+		void pausarEstado();
+		void unpauseEstado();
 		void setActive(bool isActive);
 		void setPlayer(unsigned int num, Player* player);
 		bool getIsMenu();
 		void setIsMenu(bool menu);
+		void setChosenCharacter(unsigned int chosen);
 		
 };
 

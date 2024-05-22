@@ -1,11 +1,12 @@
 #include "pch.h"
+#include "../source/Gui/Gui.h"
 
 #ifndef MAP_H
 #define MAP_H
 
-const int Max_Size = 50;
+const size_t Max_Size = 50;
 
-namespace map
+namespace mapas
 {
 	class SpriteMap
 	{
@@ -30,7 +31,7 @@ namespace map
 			std::cerr << "Error: Key not found!" << std::endl;
 			return Sprite();  // Valor por defecto en caso de no encontrar la clave
 		}
-		void insert(SpriteMap& map, const std::string key, Sprite& sprite)
+		void insert(const std::string key, Sprite& sprite)
 		{
 			for (size_t i = 0; i < size; i++)
 			{
@@ -190,7 +191,71 @@ namespace map
 		}
 	};
 
-	
+	class ButtonsMap
+	{
+	private:
+		std::string keys[Max_Size];
+		Gui::Buttons* buttons[Max_Size];
+		int size;
+	public:
+		ButtonsMap() : size(0)
+		{
+		}
+		~ButtonsMap()
+		{
+		}
+		string& getFirst()
+		{
+			for (int i = 0; i < size; ++i) {
+				return keys[i];
+			}
+			
+		}
+		Gui::Buttons* getSecond()
+		{
+			for (int i = 0; i < size; ++i) {
+				if(this->buttons[i] != nullptr)
+				{
+					return this->buttons[i];
+				}
+			}
+		}
+		void insert(const std::string key, Gui::Buttons&  button)
+		{
+			for (size_t i = 0; i < size; i++)
+			{
+				if (keys[i] == key) {
+					buttons[i] = &button;
+					return;
+				}
+			}
+			if (size < Max_Size) {
+				keys[size] = key;
+				buttons[size] = &button;
+				++size;
+			}
+			else {
+				std::cerr << "Error: Map is full!" << std::endl;
+			}
+		}
+		void erase(const std::string key)
+		{
+			for (int i = 0; i < size; ++i) {
+				if (keys[i] == key) {
+					// Mover el último elemento a la posición del elemento eliminado
+					keys[i] = keys[size - 1];
+					buttons[i] = buttons[size - 1];
+					--size;
+					return;
+				}
+			}
+			std::cerr << "Error: Key not found!" << std::endl;
+		}
+		size_t getSize() const
+		{
+			return size;
+		}
+	};
 }
 
 #endif // !MAP_H

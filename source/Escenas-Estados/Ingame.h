@@ -2,6 +2,7 @@
 #define INGAME_H
 
 #include "GameStatus.h"
+#include "../source/Gui/PausaMenu.h"
 
 
 enum Keybinds : unsigned short
@@ -29,6 +30,8 @@ enum typeBttonIn : unsigned short
 class Ingame : public GameStatus
 {
 	private:
+		Entity player;
+		PausaMenu pausaM;
 		void textureProcessor(String rute, textureType xd);
 		void initTextures();
 		void initPlayer(Texture* playerTexture, typeCharacter xd);
@@ -40,6 +43,7 @@ class Ingame : public GameStatus
 		virtual ~Ingame();
 		void render(RenderTarget* drawObj) override;
 		void checkKeyboardEvents(float deltaT) override;
+		void checkKeyboardPause(const float& deltaT);
 		void Update(float deltaT) override;
 		void GUI() override;
 		void updateMap();

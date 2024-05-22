@@ -32,22 +32,8 @@ private:
 		{
 		}
 		~Animation();
-		void update(float deltaT)
-		{
-			elapsedTime += deltaT;
-
-			if (elapsedTime >= switchTime) {
-				elapsedTime -= switchTime;
-
-				// Obtener el ancho de la textura de la entidad
-				unsigned int textureWidth = texture.getSize().x;
-
-				// Verificar si se ha alcanzado el final de la fila de sprites
-				
-
-			}
-		}
-		void play();
+		void update(const float& deltaT);
+		void reset();
 		typeAnimation& getNameAnimation();
 
 		Animation& operator=(Animation& animation)
@@ -68,7 +54,6 @@ private:
 
 	};
 
-	
 	class AnimationMap
 	{
 	private:
@@ -129,15 +114,20 @@ private:
 		}
 	};
 
+	Sprite& sprite;
+	Texture& texture;
 	AnimationMap map;
 	
 public:
-	AnimationComponent();
+	AnimationComponent(Sprite& sprite, Texture& texture);
 	~AnimationComponent();
 	Animation getClass()
 	{
 		return Animation();
 	}
+	void addAnimation(const string animation, Animation& animationType);
+	void play(const string animation, const float& deltaTime);
+	
 
 
 

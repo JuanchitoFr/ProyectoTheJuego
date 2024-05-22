@@ -9,6 +9,7 @@ GameStatus::GameStatus()
 	this->estadosArrSize = 0; this->textures = NULL; this->textureArrSize = 0;
 	this->estados = nullptr; this->ventana = nullptr; this->fin = false; this->playerArrSize = 0; this->backLayersArrSize = 0;
 	this->backLayersArr = nullptr; this->buttons = nullptr; this->isMenu = false; this->buttonArrSize = 0;
+	this->characterChosen = 0;
 }
 
 GameStatus::GameStatus(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr)
@@ -16,7 +17,7 @@ GameStatus::GameStatus(GameStatus** estados = nullptr, RenderWindow* ventana = n
 	this->ventana = ventana; this->estados = estados; this->textureArrSize = 0;
 	this->estadosArrSize = 0; this->textures = NULL; this->fin = false; this->active = true;
 	this->playerArrSize = 0; this->backLayersArrSize = 0; this->backLayersArr = nullptr;
-	this->buttons = nullptr; this->isMenu = false; this->buttonArrSize = 0;
+	this->buttons = nullptr; this->isMenu = false; this->buttonArrSize = 0; this->characterChosen = 0;
 }
 
 GameStatus::~GameStatus()
@@ -92,6 +93,16 @@ void GameStatus::findEstado()
 	this->fin = true;
 }
 
+void GameStatus::pausarEstado()
+{
+	this->paused = true;
+}
+
+void GameStatus::unpauseEstado()
+{
+	this->paused = false;
+}
+
 void GameStatus::setActive(bool isActive)
 {
 	this->active = isActive;
@@ -110,6 +121,11 @@ bool GameStatus::getIsMenu()
 void GameStatus::setIsMenu(bool menu)
 {
 	this->isMenu = menu;
+}
+
+void GameStatus::setChosenCharacter(unsigned int chosen)
+{
+	this->characterChosen = chosen;
 }
 
 

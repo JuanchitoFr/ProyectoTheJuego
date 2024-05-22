@@ -3,6 +3,7 @@
 
 class GameStatus;
 #include "GameStatus.h"
+#include "Ingame.h"
 
 enum Textures : unsigned int 
 {
@@ -38,6 +39,7 @@ class Menu : public GameStatus
 		bool changeScene;
 		Vector2u currentWinSize;
 		unsigned short bttnState, sceneState;
+		int currentCharacter;
 		float elapsedT, elapsedT2, xPos,yPos, width, height, opacidad, deltaT;
 		RectangleShape blackOverlay;
 		void initFont();
@@ -59,6 +61,7 @@ class Menu : public GameStatus
 		void GUI() override;
 		void updateButtons();
 		Gui::Buttons* getButtons() override;
+		Entity* getSprites(int numSprite);
 		
 };
 

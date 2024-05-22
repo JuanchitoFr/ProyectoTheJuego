@@ -5,7 +5,7 @@
 
 
 
-Ingame::Ingame(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr) : GameStatus(estados,ventana)
+Ingame::Ingame(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr) : GameStatus(estados,ventana), pausaM(*ventana)
 {
 	cout << "Soy ingame" << endl;
 	this->buttons = nullptr;
@@ -32,6 +32,11 @@ void Ingame::render(RenderTarget* drawObj)
 		/*player[Dragon]->render(drawObj);*/
 		
 		/*drawObj->setView(View(winSize));*/
+
+		if(this->paused) //Renderizar el menu de pausa
+		{
+			this->pausaM.render(drawObj);
+		}
 		
 	}
 	catch (const std::exception& p)
@@ -57,7 +62,7 @@ void Ingame::checkKeyboardEvents(float deltaT)
 	}
 	else if(Keyboard::isKeyPressed(Keyboard::Escape))
 	{
-		this->estados[0]->findEstado();
+		
 	}
 	else if(Keyboard::isKeyPressed(Keyboard::Home))
 	{
@@ -76,10 +81,30 @@ void Ingame::checkKeyboardEvents(float deltaT)
 
 }
 
+void Ingame::checkKeyboardPause(const float& deltaT)
+{
+	if (Keyboard::isKeyPressed(Keyboard::Escape))
+	{
+		if (!this->paused)
+			this->pausarEstado();
+		else
+			this->unpauseEstado();
+	}
+	sleep(milliseconds(90));
+}
+
 
 void Ingame::Update(float deltaT)
 {
-	checkKeyboardEvents(deltaT);
+	checkKeyboardPause(deltaT);
+	if (!paused) //Cuando no esta en pausa
+	{
+		checkKeyboardEvents(deltaT);
+	}
+	else //Pausa
+	{
+		pausaM.update();
+	}
 }
 
 void Ingame::GUI()
