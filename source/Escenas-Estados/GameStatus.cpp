@@ -3,6 +3,7 @@
 
 
 
+
 GameStatus::GameStatus()
 {
 	this->estadosArrSize = 0; this->textures = NULL; this->textureArrSize = 0;

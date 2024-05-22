@@ -146,12 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\Componentes\Animation.cpp" />
     <ClCompile Include="source\Gui\PausaMenu.cpp" />
     <ClCompile Include="source\Componentes\Hitbox.cpp" />
     <ClCompile Include="source\GameLoop\Game.cpp" />
     <ClCompile Include="source\Gui\Gui.cpp" />
     <ClCompile Include="source\Player\Entity.cpp" />
-    <ClCompile Include="source\Main\Game.cpp" />
     <ClCompile Include="source\Escenas-Estados\GameStatus.cpp" />
     <ClCompile Include="source\Escenas-Estados\Ingame.cpp" />
     <ClCompile Include="source\Escenas-Estados\Menu.cpp" />
@@ -163,13 +163,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\Funciones\Map.h" />
     <ClInclude Include="source\Gui\PausaMenu.h" />
     <ClInclude Include="source\Componentes\Hitbox.h" />
     <ClInclude Include="source\Componentes\Animation.h" />
     <ClInclude Include="source\GameLoop\Game.h" />
     <ClInclude Include="source\Gui\Gui.h" />
     <ClInclude Include="source\Player\Entity.h" />
-    <ClInclude Include="source\Main\Game.h" />
     <ClInclude Include="source\Escenas-Estados\GameStatus.h" />
     <ClInclude Include="source\Escenas-Estados\Ingame.h" />
     <ClInclude Include="source\Escenas-Estados\Menu.h" />

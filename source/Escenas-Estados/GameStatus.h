@@ -1,13 +1,18 @@
 #ifndef GAMESTATUS_H
 #define GAMESTATUS_H
 
-
 #include "../Gui/Gui.h"
-#include "../Player/Entity.h"
 #include "../Player/Player.h"
+
+
 
 enum typeCharacter {
 	Dragon, Ogro, Sirena, Yordle, Total_TypeCharacters
+};
+
+enum Estados
+{
+	Menu_State, Ingame_State
 };
 
 
@@ -44,13 +49,13 @@ class GameStatus
 		virtual void GUI();
 		/*Esto se encarga de actualizar lo que tenga, segun el deltaT (El tiempo que se demora en renderizar cada frame el pc), 
 		para ser mas específicos busquen sobre lo que contiene el método en la página de SFML :)*/
-		virtual void updateMousePos();
+		void updateMousePos();
 		/*Esto se encarga de actualizar la posición del mouse, segun el deltaT (El tiempo que se demora en renderizar cada frame el pc 
 		"Frame es como una escena, entonces seria el tiempo que se demora en generar cada escena del juego, como un storyboard" ).
 		Para ser mas específicos busquen sobre lo que contiene los métodos que contiene el metodo en la página de SFML :)*/
 		virtual Gui::Buttons* getButtons() = 0;
-		virtual Entity* getPlayer(unsigned int i);
-		virtual unsigned int getAmoutPlayer();
+		Entity* getPlayer(unsigned int i);
+		unsigned int getAmoutPlayer();
 
 		// Gets and Sets
 		RenderWindow* getWindow();

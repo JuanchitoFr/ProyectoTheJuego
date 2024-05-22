@@ -1,10 +1,8 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "gamestatus.h"
-#include "ingame.h"
-#include "Gui.h"
-
+class GameStatus;
+#include "GameStatus.h"
 
 enum Textures : unsigned int 
 {
@@ -54,7 +52,6 @@ class Menu : public GameStatus
 	public:
 		Menu(GameStatus** estados, RenderWindow* window);
 		virtual ~Menu();
-		
 		void updateBackgroundTexture(float deltaT, float switchT, float switchT2);
 		void render(RenderTarget* drawObj) override;
 		void checkKeyboardEvents(float deltaT) override;

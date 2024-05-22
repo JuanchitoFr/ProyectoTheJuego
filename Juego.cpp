@@ -2,7 +2,7 @@
 //
 
 #include <pch.h>
-#include <../source/GameLoop/game.h>
+#include <../source/GameLoop/Game.h>
 
 
 int main()

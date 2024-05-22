@@ -2,13 +2,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define constexpr FRAMERATE_LIMIT 60
-#define SCREEN_WIDHT 1280
-#define SCREEN_HEIGHT 720
 
-
-#include "../Escenas-Estados/Ingame.h"
-#include "../Escenas-Estados/menu.h"
 
 namespace
 {
@@ -23,20 +17,20 @@ namespace
 		unsigned short port;
 	};
 }
-
+#include "../source/Escenas-Estados/Ingame.h"
+#include "../source/Escenas-Estados/Menu.h"
 //Bucle del juego, aqui va todo lo esencial de lo que hagan en menu o ingame.
 class Game
 {
 	private:
 		unsigned int anchoVentana, altoVentana, framerate;
-		int currentEstadoIndex;
+		size_t currentEstadoIndex;
 		ContextSettings settings;
 		String tituloJuego;
 		RenderWindow* ventana;
 		Event event;
 		GameStatus** estados;
 		GameStatus* currentState;
-		Buttons* buttonsState;
 		float deltaT;
 		Clock deltaTclock;
 		Time timer;

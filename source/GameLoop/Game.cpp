@@ -1,5 +1,6 @@
 #include "pch.h"
-#include "Game.h"
+#include "../source/GameLoop/Game.h"
+
 
 Game::Game(unsigned int altoV = 0, unsigned int anchoV = 0, unsigned int framerate = 0, String tituloJ = "")
 {
@@ -157,7 +158,6 @@ void Game::stateEvents()
 	}
 	
 }
-
 
 
 void Game::initStates()
@@ -357,7 +357,7 @@ void Game::networkType()
 	
 	if(this->estados[0]->getButtons() != nullptr && this->estados[0]->getIsMenu() == true)
 	{
-		Buttons* newButtons = this->estados[0]->getButtons();
+		Gui::Buttons* newButtons = this->estados[0]->getButtons();
 		if (newButtons[1].isPressed())
 		{
 			initServer();

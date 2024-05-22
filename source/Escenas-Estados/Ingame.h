@@ -1,16 +1,15 @@
 #ifndef INGAME_H
 #define INGAME_H
 
-#include "gamestatus.h"
-#include "../Player/Player.h"
-#include "Menu.h"
-//Animation player
-enum Keybinds
+#include "GameStatus.h"
+
+
+enum Keybinds : unsigned short
 {
 	Down,Left,Right,Up, Total_Keybinds
 };
 
-enum mapLayers
+enum mapLayers : unsigned short
 {
 	decoration1,decoration2,floorC,wallsC, Total_MapLayers
 };
@@ -21,7 +20,7 @@ enum textureType : unsigned short
 };
 
 
-enum typeBttonIn
+enum typeBttonIn : unsigned short
 {
 
 };

@@ -44,6 +44,15 @@ namespace Gui
 
 
 	};
+
+	class Box
+	{
+	private:
+	public:
+		Box();
+		~Box();
+	};
+
 }
 	
 

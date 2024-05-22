@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "Ingame.h"
+#include "Menu.h"
+
+
 
 
 Ingame::Ingame(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr) : GameStatus(estados,ventana)
@@ -12,7 +15,7 @@ Ingame::~Ingame()
 {
 }
 
-Buttons* Ingame::getButtons()
+Gui::Buttons* Ingame::getButtons()
 {
 	return nullptr;
 }
@@ -118,11 +121,9 @@ void Ingame::textureProcessor(String rute, textureType xd)
 				// Crear un nuevo array con el tamaño incrementado
 				unsigned int newSize = xd + 1;
 				Texture* newArray = new Texture[newSize]();
-				// Copiar las texturas del array original al nuevo array
 				for (unsigned int i = 0; i < textureArrSize; i++) {
 					newArray[i] = textures[i];
 				}
-				// Liberar la memoria del array original y asignar el nuevo array
 				delete[] textures;
 				textures = newArray;
 				// Actualizar el tamaño del array
@@ -173,7 +174,7 @@ void Ingame::initBtton(Texture* textureIdle, Texture* textureHover, Texture* tex
 		{
 
 			buttonArrSize++;
-			buttons = new Buttons[buttonArrSize]();
+			buttons = new Gui::Buttons[buttonArrSize]();
 			/*buttonArr = new RectangleShape[buttonArrSize]();*/
 		}
 		else
@@ -182,7 +183,7 @@ void Ingame::initBtton(Texture* textureIdle, Texture* textureHover, Texture* tex
 			{
 				// Crear un nuevo array con el tamaño incrementado
 				unsigned int newSize = xd + 1;
-				Buttons* newArrayB = new Buttons[newSize]();
+				Gui::Buttons* newArrayB = new Gui::Buttons[newSize]();
 				// Copiar las texturas del array original al nuevo array
 				for (unsigned int i = 0; i < buttonArrSize; i++) {
 					newArrayB[i] = buttons[i];
@@ -202,7 +203,7 @@ void Ingame::initBtton(Texture* textureIdle, Texture* textureHover, Texture* tex
 		float height = static_cast<float>(this->buttons[xd].getTextureIdle().getSize().y);
 		float xPos = static_cast<float>(this->ventana->getSize().x) / 2.41f;
 		float yPos = static_cast<float>(this->ventana->getSize().y) / 2.5f;
-		this->buttons[xd] = Buttons(xPos, yPos, width, height, NULL, text, *textureIdle, *textureHover, *texturePressed);
+		this->buttons[xd] = Gui::Buttons(xPos, yPos, width, height, NULL, text, *textureIdle, *textureHover, *texturePressed);
 		this->buttons[xd].setSize(328, 180);
 
 		/*this->buttonArr[xd].setSize(Vector2f(328, 180));*/

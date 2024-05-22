@@ -1,5 +1,9 @@
 #include "pch.h"
+#include "GameStatus.h"
+#include "../source/Gui/Gui.h"
+#include "../source/Player/Player.h"
 #include "Menu.h"
+
 
 Menu::Menu(GameStatus** estados = nullptr, RenderWindow* window = nullptr) : GameStatus(estados,window)
 {
@@ -176,11 +180,12 @@ void Menu::Update(float deltaT)
 	this->GUI();
 	this->updateButtons();
 	this->updateBackgroundTexture(deltaT, 48.f, 0.4f);
+
 	for (size_t i = Dragon; i <= Yordle; i++)
 	{
 		if(i != Sirena)
 		{
-			this->sprites[i]->updateSprite(deltaT, 0.2f);
+			this->sprites[i]->updateSprite(deltaT, 0.15f);
 		}
 		
 	}
@@ -259,7 +264,7 @@ void Menu::updateButtons()
 
 
 
-Buttons* Menu::getButtons()
+Gui::Buttons* Menu::getButtons()
 {
 	return this->buttons;
 }
@@ -392,7 +397,7 @@ void Menu::initBtton(Texture* textureIdle, Texture* textureHover, Texture* textu
 		{
 			
 			buttonArrSize++;
-			buttons = new Buttons[buttonArrSize]();
+			buttons = new Gui::Buttons[buttonArrSize]();
 			/*buttonArr = new RectangleShape[buttonArrSize]();*/
 		}
 		else
@@ -401,7 +406,7 @@ void Menu::initBtton(Texture* textureIdle, Texture* textureHover, Texture* textu
 			{
 				// Crear un nuevo array con el tamaño incrementado
 				unsigned int newSize = xd + 1;
-				Buttons* newArrayB = new Buttons[newSize]();
+				Gui::Buttons* newArrayB = new Gui::Buttons[newSize]();
 				// Copiar las texturas del array original al nuevo array
 				for (unsigned int i = 0; i < buttonArrSize; i++) {
 					newArrayB[i] = buttons[i];
@@ -421,7 +426,7 @@ void Menu::initBtton(Texture* textureIdle, Texture* textureHover, Texture* textu
 		this->height = static_cast<float>(this->buttons[xd].getTextureIdle().getSize().y);
 		this->xPos = static_cast<float>(this->ventana->getSize().x) / 2.41f;
 		this->yPos = static_cast<float>(this->ventana->getSize().y) / 2.5f;
-		this->buttons[xd] = Buttons(xPos,yPos,width,height,&titleFont, text, *textureIdle, *textureHover, *texturePressed);
+		this->buttons[xd] = Gui::Buttons(xPos,yPos,width,height,&titleFont, text, *textureIdle, *textureHover, *texturePressed);
 		this->buttons[xd].setSize(140, 45);
 		
 		/*this->buttonArr[xd].setSize(Vector2f(328, 180));*/

@@ -55,18 +55,18 @@ class Entity
 		
 		// METODOS
 		/*Movimiento y posicion de la entidad*/
-		void setPosition(float xPos, float yPos) override;
-		Vector2f getPosition() override;
+		void setPosition(float xPos, float yPos);
+		Vector2f getPosition();
 		void setSpeed(float speed);
 		float getSpeed() const;
 		Vector2f getVelocity();
-		virtual void entityMovement(float deltaTime, float x, float y) override;
+		virtual void entityMovement(float deltaTime, float x, float y);
 		void setEntityAnimation(float x, float y);
 		Vector2f getEntityMovement();
 
 		/*Gestion del sprite de la entidad*/
 		virtual void render(RenderTarget* objTarget);
-		virtual void updateSprite(float deltaT, float switchT) override;
+		virtual void updateSprite(float deltaT, float switchT);
 		virtual void createSprite(Texture* spriteTexture);
 		virtual void setTextureRect(unsigned int xCount, unsigned int yCount, unsigned int columns, unsigned int rows);
 		//Gestión de la entidad

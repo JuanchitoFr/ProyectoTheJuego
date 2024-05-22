@@ -28,6 +28,7 @@ Gui::Buttons::Buttons()
 {
 	this->buttonFont = nullptr;
 	this->buttonState = idle;
+	this->visible = false;
 }
 
 Gui::Buttons::~Buttons()
@@ -206,3 +207,4 @@ void Gui::Buttons::setCharacterSize(int num)
 	this->buttonText.setCharacterSize(num);
 }
 
+//Aqui termina Definiciones de Button
