@@ -43,7 +43,6 @@ void Ingame::render(RenderTarget* drawObj)
 	{
 		std::cout << "The problemas was: " << p.what() << std::endl;
 		
-		std::cout << "Bety";
 	}
 	
 }
