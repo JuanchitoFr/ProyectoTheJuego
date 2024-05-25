@@ -21,6 +21,7 @@ Gui::Buttons::Buttons( float xPos,  float yPos, float widht, float height, Font*
 	this->buttonBody.setTexture(&textureIdle);
 	this->buttonState = idle;
 	this->visible = true;
+	this->centerText();
 }
 
 
@@ -109,7 +110,7 @@ void Gui::Buttons::setVisible(bool visible)
 	this->visible = visible;
 }
 
-void Gui::Buttons::update(Vector2f mousePos)
+void Gui::Buttons::update(const Vector2f& mousePos)
 {
 	this->buttonState = idle;
 	this->buttonBody.setOutlineThickness(3.f);

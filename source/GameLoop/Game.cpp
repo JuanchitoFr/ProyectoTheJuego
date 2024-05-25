@@ -133,6 +133,21 @@ void Game::stateEvents()
 						std::cout << "Se esta presionando la tecla A"  << std::endl;
 						break;
 					}
+					case Keyboard::W:
+					{
+						std::cout << "Se esta presionando la tecla W" << std::endl;
+						break;
+					}
+					case Keyboard::D:
+					{
+						std::cout << "Se esta presionando la tecla D" << std::endl;
+						break;
+					}
+					case Keyboard::S:
+					{
+						std::cout << "Se esta presionando la tecla S" << std::endl;
+						break;
+					}
 						
 						default:
 							break;

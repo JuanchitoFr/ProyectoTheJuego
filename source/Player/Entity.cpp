@@ -58,23 +58,6 @@ void Entity::render(RenderTarget* objTarget)
 // Anima el sprite, segun el tiempo que se le pase por argumento teniendo en cuenta el deltatime
 void Entity::updateSprite(float deltaT, float switchT)
 {
-		elapsedT += deltaT;
-
-		if (elapsedT >= switchT) {
-			elapsedT -= switchT;
-
-			coordinates.x++;
-			// Obtener el ancho de la textura de la entidad
-			unsigned int textureWidth = this->getEntityTexture()->getSize().x;
-
-			// Verificar si se ha alcanzado el final de la fila de sprites
-			if (coordinates.x * spriteWidth >= textureWidth) {
-				coordinates.x = 0; // Reiniciar a la primera columna
-			}
-
-		}
-		this->entitySprite->setTextureRect(IntRect(static_cast<unsigned int>(coordinates.x) * static_cast<unsigned int>(spriteWidth),
-			static_cast<unsigned int>(coordinates.y) * static_cast<unsigned int>(spriteHeight), static_cast<unsigned int>(spriteWidth), static_cast<unsigned int>(spriteHeight)));
 		
 }
 
@@ -100,6 +83,7 @@ void Entity::createSprite(Texture* spriteTexture)
 
 void Entity::setTextureRect(unsigned int xCount, unsigned int yCount, unsigned int columns, unsigned int rows)
 {
+	
 }
 
 void Entity::updateCharactState()
@@ -109,39 +93,16 @@ void Entity::updateCharactState()
 
 void Entity::addDamage(int damage)
 {
-	 stats.hp -= damage;
 }
 
 void Entity::asignarEstadisticas(estadisticas& stats, int hpPercent, int defMagicaPercent, 
-	int defFisicaPercent, int atkFisicoPercent, int atkMagicoPercent, int velocidadPercent) {
-
-	// Calcula los puntos para cada estadística basados en los porcentajes
-	stats.hp = (totalPoints * hpPercent / 100);
-	stats.defMagica = totalPoints * defMagicaPercent / 100;
-	stats.defFisica = totalPoints * defFisicaPercent / 100;
-	stats.atkFisico = totalPoints * atkFisicoPercent / 100;
-	stats.atkMagico = totalPoints * atkMagicoPercent / 100;
-	stats.velocidad = totalPoints * velocidadPercent / 100;
-
+	int defFisicaPercent, int atkFisicoPercent, int atkMagicoPercent, int velocidadPercent) 
+{
 	
 }
 
 void Entity::variacionStats()
 {
-	// Aplica la aleatorización de +/- 10% a cada estadística
-	random_device rd;
-	mt19937 gen(rd());
-	uniform_int_distribution<> dis(-10, 10);
-	cout << dis(gen);
-	stats.hp = static_cast<int>(stats.hp * (1.0 + static_cast<double>(dis(gen)) / 100.0));
-	stats.defMagica = static_cast<int>(stats.defMagica * (1.f + static_cast<float>(dis(gen)) / 100.f));
-	stats.defFisica = static_cast<int>(stats.defFisica * (1.f + static_cast<float>(dis(gen)) / 100.f));
-	stats.atkFisico = static_cast<int>(stats.atkFisico * (1.f + static_cast<float>(dis(gen)) / 100.f));
-	stats.atkMagico = static_cast<int>(stats.atkMagico * (1.f + static_cast<float>(dis(gen)) / 100.f));
-	stats.velocidad = static_cast<int>(stats.velocidad * (1.f + static_cast<float>(dis(gen)) / 100.f));
-
-
-
 }
 
 
@@ -158,7 +119,7 @@ Sprite* Entity::getEntitySprite() const
 }
 
 
-int Entity::getSpriteWidth() const
+float Entity::getSpriteWidth() const
 {
 	return this->spriteWidth;
 }
@@ -168,7 +129,7 @@ void Entity::setSpriteWidth(unsigned int spriteWidth)
 	this->spriteWidth = spriteWidth;
 }
 
-int Entity::getSpriteHeight() const
+float Entity::getSpriteHeight() const
 {
 	return this->spriteHeight;
 }
