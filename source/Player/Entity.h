@@ -1,6 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
-
+//ola
 enum statsOrder
 {
 	x,y,hp, atkFisico,defFisica,atkMagico,defMagica, velocidad, totalStatsSize
