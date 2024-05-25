@@ -48,6 +48,7 @@ void Ingame::render(RenderTarget* drawObj)
 	catch (const std::exception& p)
 	{
 		std::cout << "The problemas was: " << p.what() << std::endl;
+		
 	}
 	
 }
