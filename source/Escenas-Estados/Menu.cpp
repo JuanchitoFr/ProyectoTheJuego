@@ -12,7 +12,7 @@ Menu::Menu(GameStatus** estados = nullptr, RenderWindow* window = nullptr) : Gam
 	this->elapsedT = 0.f, elapsedT2 = 0.f; this->backLayersArr = 0; this->buttonArrSize = 0; this->xPos = 0;
 	this->yPos = 0; this->width = 0; this->height = 0; this->buttons = nullptr; this->backLayersArr = nullptr;
 	this->textures = nullptr; this->sceneState = Menu_Principal; this->changeScene = false; this->opacidad = 1.f;
-	this->currentCharacter = -1;
+	this->currentCharacter = 0;
 	initFont();
 	initBackground(); 
 	
@@ -247,27 +247,29 @@ void Menu::updateButtons()
 			}
 			else if(this->buttons[Bttn_ShowCharacter1].isPressed() == true && this != nullptr)
 			{
-				this->currentCharacter = 0;
+				this->currentCharacter = 1;
 			}
 			else if (this->buttons[Bttn_ShowCharacter2].isPressed() == true && this != nullptr)
 			{
-				this->currentCharacter = 1;
+				this->currentCharacter = 2;
 			}
 			else if (this->buttons[Bttn_ShowCharacter3].isPressed() == true && this != nullptr)
 			{
-				this->currentCharacter = 2;
+				this->currentCharacter = 3;
+				
 			}
 			else if (this->buttons[Bttn_ShowCharacter4].isPressed() == true && this != nullptr)
 			{
-				this->currentCharacter = 3;
+				this->currentCharacter = 4;
 			}
 
-			if (this->buttons[readyButton].isPressed() == true && this != nullptr)
+			if (this->buttons[readyButton].isPressed() == true && this != nullptr || this->currentCharacter > 0)
 			{
-				this->estados[0] = new Ingame(this->estados, this->ventana);
+				
 				this->estados[0]->setIsMenu(false);
-				cout << currentCharacter << endl;
+				cout << "Current character para pasar a ingame" << currentCharacter << endl;
 				this->estados[0]->setChosenCharacter(currentCharacter);
+				this->estados[0] = new Ingame(this->estados, this->ventana);
 				this->estados[0]->setEstadosArrSize(1);
 			}
 

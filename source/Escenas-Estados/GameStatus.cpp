@@ -128,6 +128,11 @@ void GameStatus::setChosenCharacter(unsigned int chosen)
 	this->characterChosen = chosen;
 }
 
+unsigned int GameStatus::getChosenCharacter()
+{
+	return this->characterChosen;
+}
+
 
 Entity* GameStatus::getPlayer(unsigned int i)
 {

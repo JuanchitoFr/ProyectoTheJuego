@@ -50,7 +50,7 @@ class Entity
 
 	public:
 		Entity();
-		void initStats(int stats[]);
+		/*void initStats(int stats[]);*/
 		virtual ~Entity();
 		
 		// METODOS
@@ -65,9 +65,9 @@ class Entity
 		Vector2f getEntityMovement();
 
 		/*Gestion del sprite de la entidad*/
-		virtual void render(RenderTarget* objTarget);
+		void render(RenderTarget* objTarget);
 		virtual void updateSprite(float deltaT, float switchT);
-		virtual void createSprite(Texture* spriteTexture);
+		void createSprite(Texture* spriteTexture);
 		virtual void setTextureRect(unsigned int xCount, unsigned int yCount, unsigned int columns, unsigned int rows);
 		//Gestión de la entidad
 		void updateCharactState();
@@ -83,9 +83,9 @@ class Entity
 		//Getters and setters
 		Texture* getEntityTexture() const;
 		Sprite* getEntitySprite() const;
-		int getSpriteWidth() const;
+		float getSpriteWidth() const;
 		void setSpriteWidth(unsigned int spriteWidth);
-		int getSpriteHeight() const;
+		float getSpriteHeight() const;
 		void setSpriteHeight(unsigned int spriteHeight);
 		unsigned int getEntitySize();
 		unsigned int getEntityCount();
@@ -103,7 +103,6 @@ class Entity
 		unsigned int getId();
 		bool isAlive();
 		estadisticas* getStats();
-		typeAnimation getTypeAnimation();
 		
 		
 };

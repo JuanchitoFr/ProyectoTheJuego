@@ -73,6 +73,7 @@ class GameStatus
 		bool getIsMenu();
 		void setIsMenu(bool menu);
 		void setChosenCharacter(unsigned int chosen);
+		unsigned int getChosenCharacter();
 		
 };
 

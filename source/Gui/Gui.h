@@ -26,7 +26,7 @@ namespace Gui
 		void setPosition(float x, float y);
 		void setSize(float width, float height);
 		void render(RenderTarget* drawObj);
-		void update(Vector2f mousePos);
+		void update(const Vector2f& mousePos);
 		bool getButtonState();
 		bool isPressed() const;
 		bool isHover() const;

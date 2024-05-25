@@ -89,9 +89,6 @@
     <ClInclude Include="source\Gui\PausaMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\Funciones\Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Spritesheets\Red.png">

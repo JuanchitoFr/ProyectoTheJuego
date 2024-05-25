@@ -163,7 +163,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\Funciones\Map.h" />
     <ClInclude Include="source\Gui\PausaMenu.h" />
     <ClInclude Include="source\Componentes\Hitbox.h" />
     <ClInclude Include="source\Componentes\Animation.h" />
