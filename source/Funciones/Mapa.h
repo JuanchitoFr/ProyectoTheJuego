@@ -18,8 +18,8 @@ private:
 
     void resize() {
         capacity *= 2;
-        Key* newKeys = new K[capacity];
-        Value* newValues = new V[capacity];
+        Key* newKeys = new Key[capacity];
+        Value* newValues = new Value[capacity];
         for (int i = 0; i < size; ++i) {
             newKeys[i] = keys[i];
             newValues[i] = values[i];
@@ -32,8 +32,8 @@ private:
 
 public:
     Mapa() : capacity(1), size(0) {
-        keys = new K[capacity];
-        values = new V[capacity];
+        keys = new Key[capacity];
+        values = new Value[capacity];
     }
 
     ~Mapa() {
@@ -41,7 +41,7 @@ public:
         delete[] values;
     }
 
-    void insert(const K& key, const V& value) {
+    void insert(const Key& key, const Value& value) {
         for (int i = 0; i < size; ++i) {
             if (keys[i] == key) {
                 values[i] = value;
@@ -58,7 +58,7 @@ public:
         ++size;
     }
 
-    V get(const K& key) const {
+    V get(const Key& key) const {
         for (int i = 0; i < size; ++i) {
             if (keys[i] == key) {
                 return values[i];
@@ -67,7 +67,7 @@ public:
         throw std::out_of_range("Key not found");
     }
 
-    void erase(const K& key) {
+    void erase(const Key& key) {
         for (int i = 0; i < size; ++i) {
             if (keys[i] == key) {
                 for (int j = i; j < size - 1; ++j) {
@@ -81,7 +81,7 @@ public:
         throw std::out_of_range("Key not found");
     }
 
-    bool contains(const K& key) const {
+    bool contains(const Key& key) const {
         for (int i = 0; i < size; ++i) {
             if (keys[i] == key) {
                 return true;
@@ -94,7 +94,7 @@ public:
         return size;
     }
 
-    V& operator[](const K& key) {
+    Value& operator[](const Key& key) {
         for (int i = 0; i < size; ++i) {
             if (keys[i] == key) {
                 return values[i];
@@ -106,7 +106,7 @@ public:
         }
 
         keys[size] = key;
-        values[size] = V(); // Valor por defecto segun el tipo de dato;
+        values[size] = Value(); // Valor por defecto segun el tipo de dato;
         ++size;
         return values[size - 1];
     }
@@ -115,11 +115,11 @@ public:
     // Esto mediante pair el cual nos permite utilizar y vincular un par de valores
     class Iterator {
     private: 
-        K* keys;
-        V* values;
+        Key* keys;
+        Value* values;
         int index;
     public:
-        Iterator(K* keys, V* values, int index) : keys(keys), values(values), index(index) {}
+        Iterator(Key* keys, Value* values, int index) : keys(keys), values(values), index(index) {}
 
         bool operator!=(const Iterator& other) const {
             return index != other.index;
@@ -129,7 +129,7 @@ public:
             ++index;
         }
 
-        std::pair<K, V> operator*() const {
+        std::pair<Key, Value> operator*() const {
             return std::make_pair(keys[index], values[index]);
         }
     };
