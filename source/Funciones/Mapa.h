@@ -6,6 +6,7 @@
 #ifndef MAPA_H
 #define MAPA_H
 
+//Esto no hace parte de nada, es como una "libreria" pero si agregarla al uml
 
 template<class Key, class Value>
 
