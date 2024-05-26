@@ -17,6 +17,7 @@
 #include <optional>
 #include <cmath>
 #include <utility>
+#include "../source/Funciones/Mapa.h"
 using namespace std;
 using namespace sf;
 #endif // !PCH_H
