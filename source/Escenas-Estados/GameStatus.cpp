@@ -6,18 +6,17 @@
 
 GameStatus::GameStatus()
 {
-	this->estadosArrSize = 0; this->textures = NULL; this->textureArrSize = 0;
-	this->estados = nullptr; this->ventana = nullptr; this->fin = false; this->playerArrSize = 0; this->backLayersArrSize = 0;
-	this->backLayersArr = nullptr; this->buttons = nullptr; this->isMenu = false; this->buttonArrSize = 0;
-	this->characterChosen = 0;
+	this->estadosArrSize = 0; this->estados = nullptr; this->ventana = nullptr; this->fin = false;
+	this->buttons = nullptr; this->isMenu = false; this->buttonArrSize = 0;  this->clientNumber = 1;
+	this->characterChosen = 0; this->anotherClient = false;
 }
 
 GameStatus::GameStatus(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr)
 {
-	this->ventana = ventana; this->estados = estados; this->textureArrSize = 0;
-	this->estadosArrSize = 0; this->textures = NULL; this->fin = false; this->active = true;
-	this->playerArrSize = 0; this->backLayersArrSize = 0; this->backLayersArr = nullptr;
+	this->ventana = ventana; this->estados = estados;
+	this->estadosArrSize = 0; this->fin = false; this->active = true;
 	this->buttons = nullptr; this->isMenu = false; this->buttonArrSize = 0; this->characterChosen = 0;
+	this->clientNumber = 1; this->anotherClient = false;
 }
 
 GameStatus::~GameStatus()
@@ -34,10 +33,6 @@ void GameStatus::checkKeyboardEvents(float deltaT)
 }
 
 void GameStatus::Update(float deltaTime)
-{
-}
-
-void GameStatus::GUI()
 {
 }
 
@@ -63,15 +58,8 @@ GameStatus* GameStatus::getEstado(unsigned int num)
 	return this->estados[num];
 }
 
-Texture* GameStatus::getTexture(unsigned int num)
-{
-	return &this->textures[num];
-}
 
-unsigned int GameStatus::getTextureArrSize()
-{
-	return this->textureArrSize;
-}
+
 
 unsigned int GameStatus::getEstadosArrSize()
 {
@@ -81,6 +69,10 @@ unsigned int GameStatus::getEstadosArrSize()
 unsigned int GameStatus::setEstadosArrSize(unsigned int arrSize)
 {
 	return this->estadosArrSize = arrSize;
+}
+
+void GameStatus::updateGuiStatus(const std::string& playerKey,  std::string& action)
+{
 }
 
 bool GameStatus::getFin()
@@ -108,10 +100,7 @@ void GameStatus::setActive(bool isActive)
 	this->active = isActive;
 }
 
-void GameStatus::setPlayer(unsigned int num, Player* player)
-{
-	this->player[num] = player;
-}
+
 
 bool GameStatus::getIsMenu()
 {
@@ -128,21 +117,88 @@ void GameStatus::setChosenCharacter(unsigned int chosen)
 	this->characterChosen = chosen;
 }
 
-unsigned int GameStatus::getChosenCharacter()
+const unsigned int& GameStatus::getChosenCharacter()
 {
 	return this->characterChosen;
 }
 
-
-Entity* GameStatus::getPlayer(unsigned int i)
+void GameStatus::thereIsConection(bool conection)
 {
-	return this->player[i];
+	this->conection = conection;
 }
 
-unsigned int GameStatus::getAmoutPlayer()
+const bool GameStatus::getThereIsConection()
 {
-	return this->playerArrSize;
+	return conection;
 }
+
+void GameStatus::isSelectedCharacter(bool conection)
+{
+	this->selectedCharacter = conection;
+}
+
+const bool GameStatus::getSelectedCharacter()
+{
+	return selectedCharacter;
+}
+
+void GameStatus::isAnotherClient(bool what)
+{
+	this->anotherClient = what;
+}
+
+const bool GameStatus::getAnotherClient()
+{
+	return anotherClient;
+}
+
+Entity* GameStatus::getPlayer()
+{
+	return nullptr;
+}
+
+Mapa<string, Entity*> GameStatus::getMapPlayer()
+{
+	return Mapa<string, Entity*>();
+}
+
+Mapa<string, Gui::Box*> GameStatus::getUiBoxes()
+{
+	return Mapa<string, Gui::Box*>();
+}
+
+std::pair<bool, string> GameStatus::getPlayerAction(const std::string& playerKey)
+{
+	return std::pair<bool, string>();
+}
+
+
+void GameStatus::setSocket(TcpSocket& socket)
+{
+	this->socket = &socket;
+}
+
+void GameStatus::handleAttack(const string& attacker, const string& defender)
+{
+}
+
+int GameStatus::calculateDamage(int attackStat, const std::string& defenderKey, bool isDefending)
+{
+	return 0;
+}
+
+void GameStatus::updateHealth(const std::string& playerKey, int damage)
+{
+	
+}
+
+
+
+
+
+
+
+
 
 
 

@@ -22,19 +22,17 @@
 Entity::Entity() : entityTexture(entityTexture), speed(speed)
 {
 	this->velocity = Vector2f(0.f, 0.f); this->coordinates = Vector2f(0.f, 0.f); this->elapsedT = 0.f; 
-	this->entitySprite = nullptr; this->spriteHeight = 0; this->spriteWidth = 0; this->checkDead = true;
+	this->entitySprite = nullptr; this->spriteHeight = 0; this->spriteWidth = 0; this->checkDead = false;
 	/*Tamaño de los array*/
-	this->entitySize = 0; this->entityAmount = 0; this->checkSize = 0;
-
-	
-	
+	this->entitySize = 0; this->entityAmount = 0; this->checkSize = 0; this->currentTimer = 0.f; this->currentAnimationDuration = 0.f;
 }
 
 
 Entity::~Entity()
 {
-	delete[] this->entitySprite;
-	delete[] this->entityTexture;
+	delete this->entitySprite;
+	delete this->entityTexture;
+	delete this->animations;
 }
 
 void Entity::entityMovement(float deltaTime, float x, float y)
@@ -56,7 +54,7 @@ void Entity::render(RenderTarget* objTarget)
 }
 
 // Anima el sprite, segun el tiempo que se le pase por argumento teniendo en cuenta el deltatime
-void Entity::updateSprite(float deltaT, float switchT)
+void Entity::update(const float& deltaT)
 {
 		
 }
@@ -93,16 +91,33 @@ void Entity::updateCharactState()
 
 void Entity::addDamage(int damage)
 {
+
 }
 
 void Entity::asignarEstadisticas(estadisticas& stats, int hpPercent, int defMagicaPercent, 
 	int defFisicaPercent, int atkFisicoPercent, int atkMagicoPercent, int velocidadPercent) 
 {
-	
+	// Calcula los puntos para cada estadística basados en los porcentajes
+	stats.hp = (totalPoints * hpPercent / 100);
+	stats.defMagica = totalPoints * defMagicaPercent / 100;
+	stats.defFisica = totalPoints * defFisicaPercent / 100;
+	stats.atkFisico = totalPoints * atkFisicoPercent / 100;
+	stats.atkMagico = totalPoints * atkMagicoPercent / 100;
+	stats.velocidad = totalPoints * velocidadPercent / 100;
 }
 
 void Entity::variacionStats()
 {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<> dis(-10, 10);
+	cout << dis(gen);
+	stats.hp = static_cast<int>(stats.hp * (1.0 + static_cast<double>(dis(gen)) / 100.0));
+	stats.defMagica = static_cast<int>(stats.defMagica * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.defFisica = static_cast<int>(stats.defFisica * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.atkFisico = static_cast<int>(stats.atkFisico * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.atkMagico = static_cast<int>(stats.atkMagico * (1.f + static_cast<float>(dis(gen)) / 100.f));
+	stats.velocidad = static_cast<int>(stats.velocidad * (1.f + static_cast<float>(dis(gen)) / 100.f));
 }
 
 
@@ -118,6 +133,16 @@ Sprite* Entity::getEntitySprite() const
 	return this->entitySprite;
 }
 
+void Entity::setEntityTexture(Texture& texture)
+{
+	this->entityTexture = &texture;
+}
+
+void Entity::setEntitySprite(Sprite& sprite)
+{
+	this->entitySprite = &sprite;
+}
+
 
 float Entity::getSpriteWidth() const
 {
@@ -126,7 +151,7 @@ float Entity::getSpriteWidth() const
 
 void Entity::setSpriteWidth(unsigned int spriteWidth)
 {
-	this->spriteWidth = spriteWidth;
+	this->spriteWidth = static_cast<float>(spriteWidth);
 }
 
 float Entity::getSpriteHeight() const
@@ -136,7 +161,7 @@ float Entity::getSpriteHeight() const
 
 void Entity::setSpriteHeight(unsigned int spriteHeight)
 {
-	this->spriteHeight = spriteHeight;
+	this->spriteHeight = static_cast<float>(spriteHeight);
 }
 
 unsigned int Entity::getEntityCount()
@@ -174,35 +199,8 @@ int Entity::getVelocidad()
 	return stats.velocidad;
 }
 
-IpAddress Entity::getIp()
-{
-	return ip;
-}
 
-void Entity::setIp(IpAddress ip)
-{
-	this->ip = ip;
-}
 
-void Entity::setLogin(string data)
-{
-	this->data = data;
-}
-
-string Entity::getLogin()
-{
-	return this->login;
-}
-
-void Entity::setId(unsigned int id)
-{
-	this->id = id;
-}
-
-unsigned int Entity::getId()
-{
-	return this->id;
-}
 
 bool Entity::isAlive()
 {
@@ -220,11 +218,6 @@ estadisticas* Entity::getStats()
 	return &stats;
 }
 
-
-
-
-
-
 unsigned int Entity::getEntitySize()
 {
 	return entitySize;
@@ -239,6 +232,33 @@ void Entity::setEntityAnimation(float x, float y)
 Vector2f Entity::getEntityMovement()
 {
 	return this->velocity;
+}
+
+void Entity::createAnimationComponent(Texture& texture)
+{
+	this->animations = new AnimationComponent(*this->entitySprite, texture);
+}
+
+void Entity::setTypeAnim(unsigned int typeAnim)
+{
+}
+
+unsigned int Entity::getTypeAnim()
+{
+	return 0;
+}
+
+void Entity::setCurrentAnimation(typeOfAnimation xd)
+{
+}
+
+void Entity::setNextAnimation(typeOfAnimation xd)
+{
+}
+
+void Entity::resetCurrentTimer()
+{
+	this->currentTimer = 0.f;
 }
 
 void Entity::setPosition(float xPos, float yPos)
@@ -269,8 +289,6 @@ Vector2f Entity::getVelocity()
 Packet& operator<<(Packet& packet, Entity& entity)
 {
 	return packet
-		<< entity.coordinates.x
-		<< entity.coordinates.y
 		<< entity.stats.hp
 		<< entity.stats.atkFisico
 		<< entity.stats.defFisica
@@ -283,8 +301,7 @@ Packet& operator<<(Packet& packet, Entity& entity)
 
 Packet& operator>>(Packet& packet, Entity& entity)
 {
-	return packet >> entity.coordinates.x
-		>> entity.coordinates.y
+	return packet
 		>> entity.stats.hp
 		>> entity.stats.atkFisico
 		>> entity.stats.defFisica
@@ -296,8 +313,9 @@ Packet& operator>>(Packet& packet, Entity& entity)
 
 ostream& operator<<(ostream& out, Entity& entity)
 {
-	out << "Hp: " << "(hp normal)" << entity.stats.hp << " :(hp *2)" << entity.stats.hp * 2 << " atkFisico: " << entity.stats.atkFisico << " defFisica: " << entity.stats.defFisica
-		<< " atkMagico: " << entity.stats.atkMagico << " defMagica: " << entity.stats.defMagica << " Velocidad: " << entity.stats.velocidad << endl;
+	out << "Hp: " << "(hp normal)" << entity.stats.hp << " :(hp *2)" << entity.stats.hp * 2 << endl << " atkFisico: " << entity.stats.atkFisico 
+		<< endl << " defFisica: " << entity.stats.defFisica << endl << " atkMagico: " << entity.stats.atkMagico << endl <<
+		" defMagica: " << entity.stats.defMagica << endl << " Velocidad: " << entity.stats.velocidad << endl;
 
 	return out;
 }

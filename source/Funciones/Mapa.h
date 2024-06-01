@@ -10,6 +10,7 @@
 
 template<class Key, class Value>
 
+
 class Mapa {
 private:
     Key* keys;
@@ -58,7 +59,7 @@ public:
         ++size;
     }
 
-    V get(const Key& key) const {
+    Value get(const Key& key) const {
         for (int i = 0; i < size; ++i) {
             if (keys[i] == key) {
                 return values[i];
@@ -112,7 +113,7 @@ public:
     }
 
     // Iterador el cual nos permite utilizar funciones similares al std::map original
-    // Esto mediante pair el cual nos permite utilizar y vincular un par de valores
+    // Esto mediante la una utilidad de la libreria std llamada pair el cual nos permite utilizar en conjunto y vincular un par de valores
     class Iterator {
     private: 
         Key* keys;

@@ -48,9 +48,33 @@ namespace Gui
 	class Box
 	{
 	private:
+		RectangleShape box;
+		Font* boxFont;
+		Text textBox;
+		short boxState;
+		bool visible;
 	public:
-		Box();
-		~Box();
+		Box(float xPos, float yPos, float width, float height, Font& font, string text);
+		virtual ~Box();
+		void render(RenderTarget* drawObj);
+		bool isVisible() const;
+		bool isPressed() const;
+		void setVisible(const bool visible);
+		void update(const Vector2f& mousePos);
+		void centerText();
+		Vector2f getPosition();
+		void setFont(float size);
+	};
+
+	class Bar
+	{
+	private:
+	public:
+		Bar();
+		~Bar();
+
+	
+
 	};
 
 }

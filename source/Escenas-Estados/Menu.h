@@ -5,7 +5,7 @@ class GameStatus;
 #include "GameStatus.h"
 #include "Ingame.h"
 
-enum Textures : unsigned int 
+enum TexturesM : unsigned int 
 {
 	Backg_1, Backg_2, Backg_3, Backg_4, Backg_5, PlayButtonT, 
 	PlayBtton_Hover,PlayBtton_Pressed, 
@@ -30,7 +30,8 @@ enum escenas
 class Menu : public GameStatus
 {
 	private:
-		Entity* sprites[4];
+		Mapa<string, Entity*> sprites;
+		Mapa<string, RectangleShape*> backgroundLayers;
 		Sprite cursor;
 		Font titleFont, textFont;
 		Text titleText;
@@ -44,9 +45,9 @@ class Menu : public GameStatus
 		RectangleShape blackOverlay;
 		void initFont();
 		void initBackground();
-		void initLayers(Texture& texture, Textures xd);
+		void initLayers(Texture& texture, const string key);
 		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, string text, typeBtton xd);
-		void textureProcessor(String rute, Textures xd);
+		void textureProcessor(const string rute, const string key);
 		
 		
 		
@@ -58,10 +59,11 @@ class Menu : public GameStatus
 		void render(RenderTarget* drawObj) override;
 		void checkKeyboardEvents(float deltaT) override;
 		void Update(float deltaT) override;
-		void GUI() override;
 		void updateButtons();
 		Gui::Buttons* getButtons() override;
-		Entity* getSprites(int numSprite);
+		Entity* getPlayer() override;
+		Mapa<string, Entity*> getMapPlayer() override;
+		Mapa<string, Gui::Box*> getUiBoxes() override;
 		
 };
 

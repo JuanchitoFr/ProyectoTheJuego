@@ -2,12 +2,15 @@
 #define GAMESTATUS_H
 
 #include "../Gui/Gui.h"
-#include "../Player/Player.h"
+#include "../Player/Ogro.h"
+#include "../Player/Sirena.h"
+#include "../Player/Dragon.h"
+#include "../Player/Yordle.h"
 
 
 
 enum typeCharacter {
-	Dragon, Ogro, Sirena, Yordle, Total_TypeCharacters
+	Dragon_C, Ogro_C, Sirena_C, Yordle_C, Total_TypeCharacters
 };
 
 enum Estados
@@ -21,17 +24,16 @@ enum Estados
 class GameStatus
 {
 	protected:
-		unsigned int textureArrSize, estadosArrSize,backLayersArrSize, playerArrSize, buttonArrSize, characterChosen;
+		unsigned int estadosArrSize, buttonArrSize, characterChosen, clientNumber;
 		Gui::Buttons* buttons;
-		Texture* textures;
-		RectangleShape* backLayersArr;
-		Entity** player;
+		Mapa<string, Entity*> players;
+		Mapa<string, Texture*> stateTextures;
 		GameStatus** estados;
 		RenderWindow* ventana;
-		
+		TcpSocket* socket;
 		Vector2i mousePosScreen, mousePosWindow;
 		Vector2f mousePosView;
-		bool fin, active, isMenu, paused;
+		bool fin, active, isMenu, paused, conection, selectedCharacter, anotherClient;
 	public:
 		GameStatus();
 		GameStatus(GameStatus** estados,RenderWindow* ventana);
@@ -46,7 +48,6 @@ class GameStatus
 		/*Esto se encarga de comprobar lo que ocurra con el teclado "eventos", para ser
 		mas específicos busquen sobre lo que contiene el método en la página de SFML :)*/
 		virtual void Update(float deltaTime);
-		virtual void GUI();
 		/*Esto se encarga de actualizar lo que tenga, segun el deltaT (El tiempo que se demora en renderizar cada frame el pc), 
 		para ser mas específicos busquen sobre lo que contiene el método en la página de SFML :)*/
 		void updateMousePos();
@@ -54,26 +55,45 @@ class GameStatus
 		"Frame es como una escena, entonces seria el tiempo que se demora en generar cada escena del juego, como un storyboard" ).
 		Para ser mas específicos busquen sobre lo que contiene los métodos que contiene el metodo en la página de SFML :)*/
 		virtual Gui::Buttons* getButtons() = 0;
-		Entity* getPlayer(unsigned int i);
-		unsigned int getAmoutPlayer();
 
 		// Gets and Sets
 		RenderWindow* getWindow();
 		GameStatus* getEstado(unsigned int num);
-		Texture* getTexture(unsigned int num);
-		unsigned int getTextureArrSize();
 		unsigned int getEstadosArrSize();
 		unsigned int setEstadosArrSize(unsigned int arrSize);
+		virtual void updateGuiStatus(const std::string& playerKey, std::string& action);
 		bool getFin();
 		void findEstado();
 		void pausarEstado();
 		void unpauseEstado();
 		void setActive(bool isActive);
-		void setPlayer(unsigned int num, Player* player);
 		bool getIsMenu();
 		void setIsMenu(bool menu);
 		void setChosenCharacter(unsigned int chosen);
-		unsigned int getChosenCharacter();
+		const unsigned int& getChosenCharacter() ;
+		void thereIsConection(bool conection);
+		const bool getThereIsConection();
+		void isSelectedCharacter(bool conection);
+		const bool getSelectedCharacter();
+		void isAnotherClient(bool what);
+		const bool getAnotherClient();
+		virtual Entity* getPlayer();
+		virtual Mapa<string, Entity*> getMapPlayer();
+		virtual Mapa<string, Gui::Box*> getUiBoxes();
+		std::pair<bool, string> getPlayerAction(const std::string& playerKey);
+		friend sf::Packet& operator<<(sf::Packet& packet, const std::pair<bool, std::string>& action)
+		{
+			return packet << action.first << action.second;
+		}
+
+		friend sf::Packet& operator>>(sf::Packet& packet, std::pair<bool, std::string>& action)
+		{
+			return packet >> action.first >> action.second;
+		}
+		virtual void setSocket(TcpSocket& socket);
+		virtual void handleAttack(const string& attacker, const string& defender);
+		virtual int calculateDamage(int attackStat, const std::string& defenderKey, bool isDefending);
+		virtual void updateHealth(const std::string& playerKey, int damage);
 		
 };
 

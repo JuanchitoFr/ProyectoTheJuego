@@ -2,28 +2,14 @@
 #ifndef GAME_H
 #define GAME_H
 
-
-
-namespace
-{
-	enum class CommunicationState
-	{
-		Send,Receive
-	};
-
-	struct Client
-	{
-		IpAddress clientAdress;
-		unsigned short port;
-	};
-}
 #include "../source/Escenas-Estados/Ingame.h"
 #include "../source/Escenas-Estados/Menu.h"
+#include "../Sockets/Network.h"
 //Bucle del juego, aqui va todo lo esencial de lo que hagan en menu o ingame.
 class Game
 {
 	private:
-		unsigned int anchoVentana, altoVentana, framerate;
+		unsigned int anchoVentana, altoVentana, framerate, nextEntityId;
 		size_t currentEstadoIndex;
 		ContextSettings settings;
 		String tituloJuego;
@@ -34,12 +20,9 @@ class Game
 		float deltaT;
 		Clock deltaTclock;
 		Time timer;
-		//Sockets
-		UdpSocket socket;
-		Packet packet;
-		IpAddress server;
-		bool isSocketServer, isSocketClient;
-		Entity* entity;
+		bool isClientTurn, isServerTurn, isServer,isClient;
+		TcpListener listener;
+		TcpSocket client, socket;
 		
 	public:
 		Game(unsigned int altoV, unsigned int anchoV, unsigned int framerate, String tituloJ);
@@ -56,29 +39,16 @@ class Game
 			/*Inicializa los eventos del estado*/
 		void stateEvents();
 			/*Inicializa un estado, pasandole la dirección de memoria de un estado*/
+		void updateGui();
 		void initStates();
-
-		//Experimental
-		//Gestión Sockets
-			/*Inicializa un cliente*/
-		void initServer();
-			/*Inicializa un servidor*/
-		void initClient();
-		//De prueba estas funciones de los sockets, se pueden o no eliminar luego
-			/*Recepcion de datos por parte del servidor*/
-		void recibirDatosS();
-			/*Envio de datos por parte del servidor*/
-		void enviarDatosS();
-			/*Recepcion de datos por parte del cliente*/
-		void recibirDatosC();
-			/*Envio de datos por parte del cliente*/
-		void enviarDatosC();
-
-		//Get-Set
-		void isServer();
-		void networkType();
-		IpAddress getIpAdressServer();
-		UdpSocket& getSocket();
+		void serverSide();
+		void clientSide();
+		void manageDataServer();
+		void manageDataClient();
+		void buttonStatus();
+		void switchTurn();
+		void determineTurn();
+		
 		
 		
 };

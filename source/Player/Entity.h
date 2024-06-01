@@ -1,21 +1,29 @@
+#include "../Componentes/Animation.h"
+
 #ifndef ENTITY_H
 #define ENTITY_H
-//ola
+
 enum statsOrder
 {
 	x,y,hp, atkFisico,defFisica,atkMagico,defMagica, velocidad, totalStatsSize
 };
+
+enum class typeOfAnimation : short
+{
+	Idle_Anim,
+	Walk_Anim,
+	Attack_Anim,
+	Defend_Anim,
+	Dead_Anim,
+	Hurt_Anim,
+	Total_Anim
+	
+};
 struct estadisticas
 {
-	int x; int y;
 	int hp; int defMagica;
 	int defFisica; int atkFisico;
 	int atkMagico; int velocidad;
-};
-
-enum typeAnimation
-{
-	Idle_Animation, Attack_Animation, Walk_Animation, Dead_Animation, Total_Animations
 };
 
 
@@ -23,12 +31,7 @@ enum typeAnimation
 class Entity
 {
 	protected:
-		//Socket
-		IpAddress ip;
-		//Gestión de la información que se recibe-envia
-		string data, login;
-		unsigned int id;
-		bool checkDead, restart;
+		bool checkDead, restart, animationRequested;
 		estadisticas stats;
 		static const short arrSize = 8;
 		int arrStats[arrSize];
@@ -38,11 +41,13 @@ class Entity
 		float speed;
 		Vector2f velocity;
 		//Gestion del sprite de la entidad
-		unsigned int entitySize, entityAmount, checkSize;
-		float spriteWidth, spriteHeight;
+		unsigned int entitySize, entityAmount, checkSize, typeAnim;
+		float spriteWidth, spriteHeight, currentTimer, currentAnimationDuration;
 		Texture* entityTexture;
 		Sprite* entitySprite;
 		float elapsedT;
+		AnimationComponent* animations;
+		typeOfAnimation currenStateAnim, nextAnimation;
 		//Gestion de los paquetes (envio y recepción de información)
 		friend Packet& operator<<(Packet& packet, Entity& entity);
 		friend Packet& operator>>(Packet& packet, Entity& entity);
@@ -54,6 +59,12 @@ class Entity
 		virtual ~Entity();
 		
 		// METODOS
+		void createAnimationComponent(Texture& texture);
+		virtual void setTypeAnim(unsigned int typeAnim);
+		virtual unsigned int getTypeAnim();
+		virtual void setCurrentAnimation(typeOfAnimation xd);
+		virtual void setNextAnimation(typeOfAnimation xd);
+		void resetCurrentTimer();
 		/*Movimiento y posicion de la entidad*/
 		void setPosition(float xPos, float yPos);
 		Vector2f getPosition();
@@ -66,7 +77,7 @@ class Entity
 
 		/*Gestion del sprite de la entidad*/
 		void render(RenderTarget* objTarget);
-		virtual void updateSprite(float deltaT, float switchT);
+		virtual void update(const float& deltaT);
 		void createSprite(Texture* spriteTexture);
 		virtual void setTextureRect(unsigned int xCount, unsigned int yCount, unsigned int columns, unsigned int rows);
 		//Gestión de la entidad
@@ -83,6 +94,8 @@ class Entity
 		//Getters and setters
 		Texture* getEntityTexture() const;
 		Sprite* getEntitySprite() const;
+		void setEntityTexture(Texture& texture);
+		void setEntitySprite(Sprite& sprite);
 		float getSpriteWidth() const;
 		void setSpriteWidth(unsigned int spriteWidth);
 		float getSpriteHeight() const;
@@ -98,9 +111,9 @@ class Entity
 		IpAddress getIp();
 		void setIp(IpAddress ip);
 		void setLogin(string data);
-		string getLogin();
 		void setId(unsigned int id);
 		unsigned int getId();
+		
 		bool isAlive();
 		estadisticas* getStats();
 		

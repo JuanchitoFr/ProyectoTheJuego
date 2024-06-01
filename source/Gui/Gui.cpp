@@ -124,6 +124,7 @@ void Gui::Buttons::update(const Vector2f& mousePos)
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
 				this->buttonState = pressed;
+				sleep(milliseconds(50));
 			}
 		}
 	}
@@ -209,3 +210,113 @@ void Gui::Buttons::setCharacterSize(int num)
 }
 
 //Aqui termina Definiciones de Button
+
+//Empieza Box
+
+Gui::Box::Box(float xPos, float yPos, float width, float height, Font& font, string text) : boxFont(&font)
+{
+	this->box.setSize(Vector2f(width, height));
+	this->box.setFillColor(Color(20, 20, 20, 100));
+	this->box.setOutlineColor(Color::Black);
+	this->box.setOutlineThickness(3.f);
+	this->box.setOrigin(this->box.getGlobalBounds().width / 2.f, this->box.getGlobalBounds().height / 2.f);
+	this->box.setPosition(xPos, yPos);
+	this->textBox.setFont(font);
+	this->textBox.setString(text);
+	this->textBox.setCharacterSize(48);
+	
+	this->visible = true;
+	this->boxState = idle;
+	centerText();
+}
+
+Gui::Box::~Box()
+{
+}
+
+void Gui::Box::render(RenderTarget* drawObj)
+{
+	drawObj->draw(box);
+	drawObj->draw(textBox);
+}
+
+bool Gui::Box::isVisible() const
+{
+	return true;
+}
+
+bool Gui::Box::isPressed() const
+{
+	if(boxState == pressed)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void Gui::Box::setVisible(const bool visible)
+{
+	this->visible = visible;
+}
+
+void Gui::Box::update(const Vector2f& mousePos)
+{
+	this->boxState = idle;
+	if (isVisible() == true)
+	{
+		if (this->textBox.getGlobalBounds().contains(mousePos))
+		{
+
+			this->boxState = hover;
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				this->boxState = pressed;
+			}
+		}
+	}
+
+	switch (this->boxState)
+	{
+	case idle:
+		this->textBox.setFillColor(Color::Yellow);
+		/*this->buttonBody.setTexture(&textureIdle);*/
+		break;
+	case hover:
+		this->textBox.setFillColor(Color::Green);
+		/*this->buttonBody.setTexture(&textureHover);*/
+		break;
+	case pressed:
+		this->textBox.setFillColor(Color::Red);
+		/*this->buttonBody.setTexture(&texturePressed);*/
+		break;
+	default:
+		break;
+	}
+}
+
+void Gui::Box::centerText()
+{
+	FloatRect rectBounds = this->box.getGlobalBounds();
+	float rectWidth = rectBounds.width;
+	float rectHeight = rectBounds.height;
+	FloatRect textBounds = this->textBox.getLocalBounds();
+	float textWidth = textBounds.width;
+	float textHeight = textBounds.height;
+	float textoX = rectBounds.left + (rectWidth / 2.0f) - (textWidth / 2.0f);
+	float textoY = rectBounds.top + (rectHeight / 2.0f) - (textHeight / 2.0f);
+
+	this->textBox.setPosition(textoX, textoY);
+}
+
+Vector2f Gui::Box::getPosition()
+{
+	return this->box.getPosition();
+}
+
+void Gui::Box::setFont(float size)
+{
+	this->textBox.setCharacterSize((int)size);
+	centerText();
+}

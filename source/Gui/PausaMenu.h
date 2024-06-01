@@ -15,17 +15,16 @@ private:
 	RectangleShape container;
 	RenderWindow* ventana;
 	int size;
-	Gui::Buttons* buttons[2];
+	Mapa<string, Gui::Buttons*> botones;
 public:
 	PausaMenu(RenderWindow& ventana, Font& fuenteMenu);
 	virtual ~PausaMenu();
-	void createNewButton(float xPos, float yPos);
+	void createNewButton(float xPos, float yPos, const string key, const string text);
 	void update(const Vector2f& mousePos);
 	bool checkIsUnPause();
 	void render(RenderTarget* objTarget);
-	void IsButtonPressed();
-	Gui::Buttons** getButtons();
-
+	const bool IsButtonPressed(const string key);
+	Mapa<string, Gui::Buttons*> getBotones();
 
 
 };

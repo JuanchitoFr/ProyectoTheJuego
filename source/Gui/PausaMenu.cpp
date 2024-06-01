@@ -22,28 +22,24 @@ PausaMenu::PausaMenu(RenderWindow& ventana, Font& fuenteMenu) : fuenteMenu(fuent
 
 PausaMenu::~PausaMenu()
 {
-	if (this->buttons != nullptr)
+	for(auto map : botones)
 	{
-		for (size_t i = 0; i < size; i++)
-		{
-			delete[i] buttons;
-		}
+		delete map.second;
 	}
 	
 }
 
-void PausaMenu::createNewButton(float xPos, float yPos)
+void PausaMenu::createNewButton(float xPos, float yPos, const string key, const string text)
 {
-	this->buttons[0] = new Gui::Buttons(xPos, yPos, 250, 150, &fuenteMenu, "Resume", Texture(), Texture(), Texture());
-	this->buttons[1] = new Gui::Buttons(xPos, yPos * 2, 250, 150, &fuenteMenu, "Exit", Texture(), Texture(), Texture());
+	this->botones[key] = new Gui::Buttons(xPos, yPos, 250,150, &fuenteMenu, text, Texture(), Texture(), Texture());
 	
 }
 
 void PausaMenu::update(const Vector2f& mousePos)
 {
-	for (size_t i = 0; i < size; i++)
+	for(auto map : botones)
 	{
-		this->buttons[i]->update(mousePos);
+		map.second->update(mousePos);
 	}
 }
 
@@ -58,25 +54,20 @@ void PausaMenu::render(RenderTarget* objTarget)
 	objTarget->draw(background);
 	objTarget->draw(container);
 
-	for (size_t i = 0; i < size; i++)
+	for(auto map : botones)
 	{
-		this->buttons[i]->render(objTarget);
+		map.second->render(objTarget);
 	}
 
 	objTarget->draw(menuText);
 }
 
-void PausaMenu::IsButtonPressed()
+const bool PausaMenu::IsButtonPressed(const string key)
 {
-		if(this->buttons[Exit_Button]->isPressed())
-		{
-			this->ventana->close();
-		}
-	
+	return this->botones[key]->isPressed();
 }
 
-Gui::Buttons** PausaMenu::getButtons()
+Mapa<string, Gui::Buttons*> PausaMenu::getBotones()
 {
-	return this->buttons;
+	return this->botones;
 }
-

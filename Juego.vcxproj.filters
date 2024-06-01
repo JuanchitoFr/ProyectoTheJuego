@@ -30,9 +30,6 @@
     <ClCompile Include="source\Escenas-Estados\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\Player\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PrecompiledHeader\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,13 +39,25 @@
     <ClCompile Include="source\GameLoop\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\Componentes\Hitbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\Gui\PausaMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Componentes\Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player\Sirena.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player\Ogro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player\Yordle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player\Dragon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Sockets\Network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,9 +74,6 @@
     <ClInclude Include="source\Escenas-Estados\Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\Player\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PrecompiledHeader\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -77,16 +83,28 @@
     <ClInclude Include="source\Componentes\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\Gui\TileMapGestor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\GameLoop\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\Componentes\Hitbox.h">
+    <ClInclude Include="source\Gui\PausaMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\Gui\PausaMenu.h">
+    <ClInclude Include="source\Funciones\Mapa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player\Sirena.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player\Ogro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player\Yordle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player\Dragon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Sockets\Network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

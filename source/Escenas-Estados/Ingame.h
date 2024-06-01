@@ -5,6 +5,7 @@
 #include "../source/Gui/PausaMenu.h"
 
 
+
 enum Keybinds : unsigned short
 {
 	Down,Left,Right,Up, Total_Keybinds
@@ -20,32 +21,43 @@ enum mapLayers : unsigned short
 
 enum textureType : unsigned short
 {
-	Dragon_T, Dragon_FireEffect , Ogro_T , Sirena_T, Yordle_T,  Total_TexturesIg
+	Dragon_T, Dragon_FireEffect , Ogro_T , Sirena_T, Yordle_T, Battle_Background,  Total_TexturesIg
 };
 
+//enum typeAnim
+//{
+//	Idle_Anim,
+//	Walk_Anim,
+//	Attack_Anim,
+//	Defend_Anim,
+//	Dead_Anim,
+//	Total_Anim
+//};
 
-enum typeBttonIn : unsigned short
-{
 
-};
 
 // Estado ya en el juego
 class Ingame : public GameStatus
 {
 private:
-		Entity* entities[2];
+		Mapa<string, Gui::Box*> uiBoxes;
+		RectangleShape battleBackground;
+		std::pair<bool, string> actions;
 		PausaMenu* pausaM;
 		FloatRect winSize;
 		Font font;
+		//JAJAJAJA
+		string forCorrectPorpouses;
+		
 
 		//funciones de inicio
-		void textureProcessor(String rute, textureType xd);
-		void initTextures();
-		void initPlayer(Texture* playerTexture, unsigned int xRows, unsigned int yColumns, Players player);
-		void initMap();
+		void textureProcessor(const string rute, const string key);
+		void initBackgroud();
+		void initPlayer();
+		void createPlayer(const string& key, float xPos, float yPos);
+		void initUI();
 		void initFont();
 		void initPauseMenu();
-		void initBtton(Texture* textureIdle, Texture* textureHover, Texture* texturePressed, string text, typeBttonIn xd);
 	public:
 		Ingame(GameStatus** estados, RenderWindow* ventana);
 		virtual ~Ingame();
@@ -53,13 +65,17 @@ private:
 		void checkKeyboardEvents(float deltaT) override;
 		void checkKeyboardPause(const float& deltaT);
 		void Update(float deltaT) override;
-		void GUI() override;
+		void updateGuiStatus(const std::string& playerKey, std::string& action) override;
 		void updateMap();
 		void updateButtons();
 		Gui::Buttons* getButtons() override;
-
-		
-
+		Mapa<string, Entity*> getMapPlayer() override;
+		void setActualPlayers(Mapa<string, Entity*> players);
+		Mapa<string, Gui::Box*> getUiBoxes() override;
+		std::pair<bool, string> getPlayerAction(const std::string& playerKey);
+		void handleAttack(const string& attacker, const string& defender) override;
+		int calculateDamage(int attackStat, const std::string& defenderKey, bool isDefending) override;
+		void updateHealth(const std::string& playerKey, int damage) override;
 
 };
 
