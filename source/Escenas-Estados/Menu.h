@@ -61,7 +61,6 @@ class Menu : public GameStatus
 		void Update(float deltaT) override;
 		void updateButtons();
 		Gui::Buttons* getButtons() override;
-		Entity* getPlayer() override;
 		Mapa<string, Entity*> getMapPlayer() override;
 		Mapa<string, Gui::Box*> getUiBoxes() override;
 		

@@ -294,8 +294,7 @@ Packet& operator<<(Packet& packet, Entity& entity)
 		<< entity.stats.defFisica
 		<< entity.stats.atkMagico
 		<< entity.stats.defMagica
-		<< entity.stats.velocidad
-		<< entity.checkDead;
+		<< entity.stats.velocidad;
 	
 }
 
@@ -307,8 +306,7 @@ Packet& operator>>(Packet& packet, Entity& entity)
 		>> entity.stats.defFisica
 		>> entity.stats.atkMagico
 		>> entity.stats.defMagica
-		>> entity.stats.velocidad
-		>> entity.checkDead;
+		>> entity.stats.velocidad;
 }
 
 ostream& operator<<(ostream& out, Entity& entity)

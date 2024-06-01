@@ -41,6 +41,7 @@ class Ingame : public GameStatus
 {
 private:
 		Mapa<string, Gui::Box*> uiBoxes;
+		Mapa<string, Entity*> playersIngame;
 		RectangleShape battleBackground;
 		std::pair<bool, string> actions;
 		PausaMenu* pausaM;
@@ -70,12 +71,13 @@ private:
 		void updateButtons();
 		Gui::Buttons* getButtons() override;
 		Mapa<string, Entity*> getMapPlayer() override;
-		void setActualPlayers(Mapa<string, Entity*> players);
+		void setActualPlayers(Mapa<string, Entity*> players) override;
 		Mapa<string, Gui::Box*> getUiBoxes() override;
 		std::pair<bool, string> getPlayerAction(const std::string& playerKey);
 		void handleAttack(const string& attacker, const string& defender) override;
 		int calculateDamage(int attackStat, const std::string& defenderKey, bool isDefending) override;
 		void updateHealth(const std::string& playerKey, int damage) override;
+		void determinateTurn();
 
 };
 

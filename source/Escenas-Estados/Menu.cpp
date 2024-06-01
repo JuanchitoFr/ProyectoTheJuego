@@ -271,10 +271,6 @@ Gui::Buttons* Menu::getButtons()
 	return this->buttons;
 }
 
-Entity* Menu::getPlayer()
-{
-	return nullptr;
-}
 
 Mapa<string, Entity*> Menu::getMapPlayer()
 {

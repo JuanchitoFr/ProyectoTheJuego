@@ -3,7 +3,7 @@
 
 
 Game::Game(unsigned int altoV = 0, unsigned int anchoV = 0, unsigned int framerate = 0, String tituloJ = "") : nextEntityId(0),
-isServerTurn(false), isClientTurn(false)
+isServerTurn(false), isClientTurn(false), turns(false)
 {
 	this->altoVentana = altoV;
 	this->anchoVentana = anchoV;
@@ -16,7 +16,6 @@ isServerTurn(false), isClientTurn(false)
 	this->settings.antialiasingLevel = 16;
 	initStates();
 	this->currentEstadoIndex = this->estados[0]->getEstadosArrSize() - 1;
-	
 	
 }
 
@@ -101,21 +100,25 @@ void Game::updateDeltaT()
 
 void Game::run()
 {
+	
+
 	while (this->ventana->isOpen()) {
 		
 		this->updateDeltaT();
 		this->updateState();
 		this->buttonStatus();
-		if (isServer == true) {
-			manageDataServer();
-		}
-
-		// Lógica de turnos del cliente
-		if (isClient == true) {
-			manageDataClient();
-		}
 		
-
+		if (isServer == true) {
+			
+			manageDataServer();
+			sf::sleep(sf::milliseconds(80));
+		}
+		else if (isClient == true) {
+			
+			manageDataClient();
+			sf::sleep(sf::milliseconds(80));
+		}
+			
 		this->render();
 	}
 }
@@ -258,7 +261,7 @@ void Game::serverSide()
 	{
 		std::cout << "Connected" << endl;
 		isServer = true;
-		
+
 	}
 	// Aceptar una nueva conexión
 	/*sf::TcpSocket client;*/
@@ -276,7 +279,7 @@ void Game::serverSide()
 
 	while (!bothReady) {
 		sf::Packet packet;
-		
+
 		// Send selected character to client
 		std::string message = std::to_string(estados[0]->getChosenCharacter());
 		packet << message;
@@ -299,7 +302,7 @@ void Game::serverSide()
 			if (chosenCharacter > 0) {
 				currentCha = chosenCharacter;
 				this->estados[0]->isAnotherClient(true);
-				 // Mark as ready to move to the game state
+				// Mark as ready to move to the game state
 
 				sf::Packet readyPacket;
 				readyPacket << "READY";
@@ -318,52 +321,66 @@ void Game::serverSide()
 						this->estados[0]->setEstadosArrSize(1);
 
 					}
+
+					
 					bothReady = true;
 				}
-				
+
+			}
+		}
+	}
+
+	if (this->estados[0]->getThereIsConection() == true) {
+		sf::Packet statsPacket;
+
+		if (estados[0]->getMapPlayer()["Player_1"]) {
+			std::cout << "Antes de la variacion (servidor): " << std::endl << *estados[0]->getMapPlayer()["Player_1"] << std::endl;
+			sf::sleep(sf::milliseconds(50));
+			estados[0]->getMapPlayer()["Player_1"]->variacionStats();
+			statsPacket << *estados[0]->getMapPlayer()["Player_1"];
+			if (client.send(statsPacket) != sf::Socket::Done) {
+				std::cout << "Stats packet not sent" << std::endl;
+				return;
+			}
+		}
+		else {
+			std::cout << "Server entity is null" << std::endl;
+			return;
+		}
+
+		// Recibir estadísticas del personaje del cliente
+		statsPacket.clear();
+		if (client.receive(statsPacket) != sf::Socket::Done) {
+			std::cout << "Stats packet not received" << std::endl;
+			return;
+		}
+		else {
+
+			if (estados[0]->getMapPlayer()["Player_2"]) {
+				statsPacket >> *estados[0]->getMapPlayer()["Player_2"];
+				std::cout << "Después de la variación (Cliente): " << *estados[0]->getMapPlayer()["Player_2"] << std::endl;
+				sf::sleep(sf::milliseconds(50));
+			}
+			else {
+				std::cout << "Client entity is null" << std::endl;
+				return;
 			}
 		}
 	}
 	sf::sleep(milliseconds(50));
+
+
+	
+	
+	
 	
 
-	if (this->estados[0]->getThereIsConection() == true)
-	{
-		sf::Packet statsPacket;
-		Entity* serverEntity = new Entity();
-		std::cout << "Antes de la variacion (servidor): " << endl << *this->estados[0]->getMapPlayer()["Player_1"] << endl;
-		sf::sleep(milliseconds(50));
-		this->estados[0]->getMapPlayer()["Player_1"]->variacionStats();
-		serverEntity = estados[0]->getMapPlayer()["Player_1"];
-		statsPacket << *serverEntity;
-		if (client.send(statsPacket) != sf::Socket::Done)
-		{
-			std::cout << "Stats packet not sent" << std::endl;
-			return;
-		}
-		// Recibir estadísticas del personaje del cliente
-		statsPacket.clear();
-		if (client.receive(statsPacket) != sf::Socket::Done)
-		{
-			std::cout << "Stats packet not received" << std::endl;
-			return;
-		}
-		else
-		{
-			statsPacket >> *this->estados[0]->getMapPlayer()["Player_2"];
-			std::cout << "Después de la variación (Cliente): " << *this->estados[0]->getMapPlayer()["Player_2"] << endl;
-			sf::sleep(milliseconds(50));
-		}
-		
-	}
-	this->client.setBlocking(false);
-	this->estados[0]->setSocket(client);
+	
 		
 }
 
 void Game::clientSide()
 {
-	
 	/*sf::TcpSocket socket;*/
 	// Intentar conectar al servidor en el puerto 53000
 	if (socket.connect("127.0.0.1", 53000) != sf::Socket::Done)
@@ -380,12 +397,19 @@ void Game::clientSide()
 	bool clientCharacterSent = false;
 	int currentCha;
 
-	while (!bothReady) 
+	while (!bothReady)
 	{
-		sf::Packet packet;
-		
+			// Send selected character to server
+			sf::Packet packet;
+			std::string message = std::to_string(estados[0]->getChosenCharacter());
+			packet << message;
+			if (socket.send(packet) != sf::Socket::Done) {
+				std::cout << "Packet not sent" << std::endl;
+				return;
+			}
+			
 		// Receive selected character from server
-		if (!clientCharacterSent) {
+		
 			if (socket.receive(packet) != sf::Socket::Done) {
 				std::cout << "Packet not received" << std::endl;
 				return;
@@ -396,95 +420,90 @@ void Game::clientSide()
 				int chosenCharacter = std::stoi(receivedMessage);
 				if (chosenCharacter > 0) {
 					currentCha = chosenCharacter;
-					
-				}
-			}
-		}
-
-		// Send selected character to server
-		packet.clear();
-		std::string message = std::to_string(estados[0]->getChosenCharacter());
-		packet << message;
-
-		if (socket.send(packet) != sf::Socket::Done) {
-			std::cout << "Packet not sent" << std::endl;
-			return;
-		}
-		else
-		{
-			this->estados[0]->getMapPlayer();
-			clientCharacterSent = true;
-		}
-		
-
-		// Wait for server to confirm both are ready
-		sf::Packet readyPacket;
-		if (socket.receive(readyPacket) != sf::Socket::Done) {
-			std::cout << "Ready packet not received" << std::endl;
-			return;
-		}
-		else {
-			std::string readyMessage;
-			readyPacket >> readyMessage;
-			if (readyMessage == "READY") {
-				this->estados[0]->thereIsConection(true);
-				if (this->estados[0]->getThereIsConection() == true)
-				{
-					this->estados[0] = new Ingame(this->estados, this->ventana);
-					this->estados[0]->setChosenCharacter(currentCha);
 					this->estados[0]->isAnotherClient(true);
-					this->estados[0]->setEstadosArrSize(1);
+					
+					// Wait for server to confirm both are ready
+					sf::Packet readyPacket;
+					if (socket.receive(readyPacket) != sf::Socket::Done) {
+						std::cout << "Ready packet not received" << std::endl;
+						return;
+					}
+					else {
+						std::string readyMessage;
+						readyPacket >> readyMessage;
+						if (readyMessage == "READY") {
+							this->estados[0]->thereIsConection(true);
+							if (this->estados[0]->getThereIsConection() == true)
+							{
+								this->estados[0] = new Ingame(this->estados, this->ventana);
+								this->estados[0]->setChosenCharacter(currentCha);
+								this->estados[0]->isAnotherClient(true);
+								this->estados[0]->setEstadosArrSize(1);
+							}
+
+							
+							bothReady = true;
+						}
+					}
 				}
-				bothReady = true;
 			}
-		}
 	}
 
-	if (this->estados[0]->getThereIsConection())
-	{
+	if (this->estados[0]->getThereIsConection()) {
 		// Recibir estadísticas del personaje del servidor
 		sf::Packet statsPacket;
-		if (socket.receive(statsPacket) != sf::Socket::Done)
-		{
+		if (socket.receive(statsPacket) != sf::Socket::Done) {
 			std::cout << "Stats packet not received" << std::endl;
 			return;
 		}
-		else
-		{
-			
-			statsPacket >> *estados[0]->getMapPlayer()["Player_2"];
-			std::cout << "Después de la variación (Servidor): " << *this->estados[0]->getMapPlayer()["Player_2"] << endl;
-			sf::sleep(milliseconds(50));
+		else {
+
+			if (estados[0]->getMapPlayer()["Player_2"]) {
+				statsPacket >> *estados[0]->getMapPlayer()["Player_2"];
+				std::cout << "Después de la variación (Servidor): " << *estados[0]->getMapPlayer()["Player_2"] << std::endl;
+				sf::sleep(sf::milliseconds(50));
+			}
+			else {
+				std::cout << "Server entity is null" << std::endl;
+				return;
+			}
 		}
 
 		// Enviar estadísticas del personaje del cliente al servidor
 		statsPacket.clear();
-		std::cout << "Antes de la variacion (Cliente): " << endl << *this->estados[0]->getMapPlayer()["Player_1"] << endl;
-		sf::sleep(milliseconds(50));
-		Entity* clientEntity = estados[0]->getMapPlayer()["Player_1"];
-		clientEntity->variacionStats();
-		statsPacket << *clientEntity;
-		if (socket.send(statsPacket) != sf::Socket::Done)
-		{
-			std::cout << "Stats packet not sent" << std::endl;
+
+		if (estados[0]->getMapPlayer()["Player_1"]) {
+			std::cout << "Antes de la variacion (Cliente): " << std::endl << *estados[0]->getMapPlayer()["Player_1"] << std::endl;
+			sf::sleep(sf::milliseconds(50));
+			estados[0]->getMapPlayer()["Player_1"]->variacionStats();
+			statsPacket << *estados[0]->getMapPlayer()["Player_1"];
+			if (socket.send(statsPacket) != sf::Socket::Done) {
+				std::cout << "Stats packet not sent" << std::endl;
+				return;
+			}
+		}
+		else {
+			std::cout << "Client entity is null" << std::endl;
 			return;
 		}
-		
 	}
-	socket.setBlocking(false);
-	this->estados[0]->setSocket(socket);
+	
+
+	
+	
+
 	
 }
 
 void Game::manageDataServer()
 {
 	
-	if (!isServerTurn) return;
-	
+	client.setBlocking(false);
+	this->estados[0]->setSocket(client);
 	sf::Packet actionPacket;
 	if (client.receive(actionPacket) != sf::Socket::Done)
 	{
-		std::cout << "Action packet not received" << std::endl;
+		
 		return;
 	}
 	else
@@ -496,15 +515,10 @@ void Game::manageDataServer()
 		// Actualizar la animación del jugador correspondiente
 		this->estados[0]->updateGuiStatus(playerKey, action);
 
-		switchTurn();
+	}
 
-		// Notificar al cliente que el turno ha cambiado
-		sf::Packet turnPacket;
-		turnPacket << isServerTurn;
-		if (client.send(turnPacket) != sf::Socket::Done) {
-			std::cout << "Turn packet not sent" << std::endl;
-		}
-		//sf::Packet damagePacket;
+}
+//sf::Packet damagePacket;
 		//int damage = estados[0]->calculateDamage(this->estados[0]->getMapPlayer()["Player_1"]->getAtkFisico(), playerKey, isDefending);
 		//this->estados[0]->updateHealth("Player_2", damage);
 		//damagePacket << damage << this->estados[0]->getMapPlayer()["Player_1"]->getHp();
@@ -527,67 +541,56 @@ void Game::manageDataServer()
 		//this->estados[0]->getMapPlayer()[updatedDefenderKey]->getStats()->hp = updatedHealth;
 
 		//std::cout << "Salud actualizada de " << updatedDefenderKey << ": " << updatedHealth << std::endl;
-	}
-
-	
-}
-
 void Game::manageDataClient()
 {
 	
-	sf::Packet turnPacket;
-	if (socket.receive(turnPacket) != sf::Socket::Done) {
-		std::cout << "Turn packet not received" << std::endl;
+	socket.setBlocking(false);
+	
+	this->estados[0]->setSocket(socket);
+	
+	sf::Packet actionPacket;
+	if (socket.receive(actionPacket) != sf::Socket::Done)
+	{
+		
 		return;
 	}
-	turnPacket >> isServerTurn;
-	if (!isServerTurn) 
+	else
 	{
-		sf::Packet actionPacket;
-		if (socket.receive(actionPacket) != sf::Socket::Done)
-		{
-			std::cout << "Action packet not received" << std::endl;
-			return;
-		}
-		else
-		{
+		
+		std::string action, playerKey;
+		bool isDefending;
+		actionPacket >> action >> playerKey >> isDefending;
+		playerKey = "Player_2";
+		// Actualizar la animación del jugador correspondiente
+		this->estados[0]->updateGuiStatus(playerKey, action);
 
-			std::string action, playerKey;
-			bool isDefending;
-			actionPacket >> action >> playerKey >> isDefending;
-			playerKey = "Player_2";
-			// Actualizar la animación del jugador correspondiente
-			this->estados[0]->updateGuiStatus(playerKey, action);
-
-			//sf::Packet damagePacket;
-			//int damage = estados[0]->calculateDamage(this->estados[0]->getMapPlayer()["Player_1"]->getAtkFisico(), playerKey, isDefending);
-			//this->estados[0]->updateHealth("Player_2", damage);
-			//damagePacket << damage << this->estados[0]->getMapPlayer()["Player_1"]->getHp();
-			//if(socket.send(damagePacket) != Socket::Done)
-			//{
-			//	std::cout << "Damage packet not sent" << std::endl;
-			//	return;
-			//}
-
-			//// Recibir y actualizar la salud del defensor
-			//sf::Packet healthPacket;
-			//if (socket.receive(healthPacket) != sf::Socket::Done) {
-			//	std::cout << "Health packet not received" << std::endl;
-			//	return;
-			//}
-
-			//std::string updatedDefenderKey;
-			//int updatedHealth;
-			//healthPacket >> updatedDefenderKey >> updatedHealth;
-			//this->estados[0]->getMapPlayer()[updatedDefenderKey]->getStats()->hp = updatedHealth;
-
-			//std::cout << "Salud actualizada de " << updatedDefenderKey << ": " << updatedHealth << std::endl;
-		}
 	}
-	
-	
+
 }
 
+//sf::Packet damagePacket;
+		//int damage = estados[0]->calculateDamage(this->estados[0]->getMapPlayer()["Player_1"]->getAtkFisico(), playerKey, isDefending);
+		//this->estados[0]->updateHealth("Player_2", damage);
+		//damagePacket << damage << this->estados[0]->getMapPlayer()["Player_1"]->getHp();
+		//if(socket.send(damagePacket) != Socket::Done)
+		//{
+		//	std::cout << "Damage packet not sent" << std::endl;
+		//	return;
+		//}
+
+		//// Recibir y actualizar la salud del defensor
+		//sf::Packet healthPacket;
+		//if (socket.receive(healthPacket) != sf::Socket::Done) {
+		//	std::cout << "Health packet not received" << std::endl;
+		//	return;
+		//}
+
+		//std::string updatedDefenderKey;
+		//int updatedHealth;
+		//healthPacket >> updatedDefenderKey >> updatedHealth;
+		//this->estados[0]->getMapPlayer()[updatedDefenderKey]->getStats()->hp = updatedHealth;
+
+		//std::cout << "Salud actualizada de " << updatedDefenderKey << ": " << updatedHealth << std::endl;
 
 
 void Game::buttonStatus()
@@ -605,20 +608,21 @@ void Game::buttonStatus()
 
 void Game::switchTurn()
 {
-	isServerTurn = !isServerTurn;
+	if (isServerTurn == true) {
+		isServerTurn = false;
+		isClientTurn = true;
+	}
+	else if(isClientTurn = true) 
+	{
+		isServerTurn = true;
+		isClientTurn = false;
+	}
+	
 }
 
 void Game::determineTurn()
 {
-	auto player1 = this->estados[0]->getMapPlayer()["Player_1"];
-	auto player2 = this->estados[0]->getMapPlayer()["Player_2"];
-
-	if (player1->getVelocidad() >= player2->getVelocidad()) {
-		isServerTurn = true; // Player_1 (Servidor) juega primero
-	}
-	else {
-		isServerTurn = false; // Player_2 (Cliente) juega primero
-	}
+	
 }
 
 

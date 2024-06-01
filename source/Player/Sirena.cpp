@@ -7,12 +7,12 @@ Sirena::Sirena(Texture& texture, float xPos, float yPos)
 	this->asignarEstadisticas(this->stats, 10, 16, 10, 11, 27, 26);
 	this->setPosition(xPos, yPos);
 	this->createAnimationComponent(texture);
-	this->animations->addAnimation("Idle", 0, 3, 2, 8, 6, 9, 0.2f);
-	this->animations->addAnimation("Walk", 0, 1, 4, 1, 4, 5, 0.2f);
-	this->animations->addAnimation("Defend", 0, 3, 2, 3, 4, 5, 0.2f);
-	this->animations->addAnimation("Attack", 0, 2, 3, 2, 4, 5, 0.2f);
-	this->animations->addAnimation("Dead", 0, 0, 4, 0, 4, 5, 0.2f);
-	this->animations->addAnimation("Hurt", 0, 3, 2, 3, 4, 5, 0.2f);
+	this->animations->addAnimation("Idle", 0, 2, 2, 2, 6, 9, 0.2f);
+	this->animations->addAnimation("Walk", 0, 0, 5, 0, 6, 9, 0.2f);
+	this->animations->addAnimation("Defend", 0, 3, 2, 3, 6, 9, 0.2f);
+	this->animations->addAnimation("Attack", 3, 4, 5, 4, 6, 9, 0.2f);
+	this->animations->addAnimation("Dead", 5, 4, 8, 4, 6, 9, 0.2f);
+	this->animations->addAnimation("Hurt", 0, 4, 2, 4, 6, 9, 0.2f);
 	this->currenStateAnim = typeOfAnimation::Idle_Anim;
 }
 

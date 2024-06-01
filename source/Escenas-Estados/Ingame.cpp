@@ -5,17 +5,18 @@
 
 
 
-Ingame::Ingame(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr) : GameStatus(estados,ventana), forCorrectPorpouses("")
+Ingame::Ingame(GameStatus** estados = nullptr, RenderWindow* ventana = nullptr) : GameStatus(estados,ventana), forCorrectPorpouses("nada")
 {
 
 	std::cout << "Soy ingame" << endl;
+	initPlayer();
 	this->buttons = nullptr;
 	initBackgroud();
 	initFont();
 	initUI();
 	this->pausaM = new PausaMenu(*ventana, font);
 	this->initPauseMenu();
-	initPlayer();
+	
 	
 	
 }
@@ -44,11 +45,12 @@ Gui::Buttons* Ingame::getButtons()
 
 Mapa<string, Entity*> Ingame::getMapPlayer()
 {
-	return players;
+	return playersIngame;
 }
 
 void Ingame::setActualPlayers(Mapa<string, Entity*> players)
 {
+	this->playersIngame = players;
 	this->players = players;
 }
 
@@ -59,7 +61,7 @@ Mapa<string, Gui::Box*> Ingame::getUiBoxes()
 
 std::pair<bool, string> Ingame::getPlayerAction(const std::string& playerKey)
 {
-	for(auto&& map: players)
+	for(auto&& map: playersIngame)
 	{
 		if (map.first == this->actions.second)
 		{
@@ -136,6 +138,33 @@ void Ingame::updateHealth(const std::string& playerKey, int damage)
 	}
 }
 
+void Ingame::determinateTurn()
+{
+	for(auto&& map: players)
+	{
+		std::cout << map.first << endl;
+	}
+	bool isServerTurn, isClientTurn;
+	std::cout << "Esto es antes de comparar velocidades" << endl;
+	if (this->estados[0]->getMapPlayer()["Player_1"]->getStats()->velocidad >= this->estados[0]->getMapPlayer()["Player_2"]->getStats()->velocidad) {
+		std::cout << "Empieza primero el servidor" << endl;
+		isServerTurn = true; // Siempre es el turno del servidor
+		isClientTurn = false;
+	}
+	else {
+		std::cout << "Empieza primero el cliente" << endl;
+		isServerTurn = false; // Siempre es el turno del cliente
+		isClientTurn = true;
+	}
+
+	Packet packet;
+	packet << isServerTurn << isClientTurn;
+	if(socket->send(packet) != Socket::Done)
+	{
+		std::cout << "turns packet from ingame not send" << endl;
+	}
+}
+
 void Ingame::render(RenderTarget* drawObj)
 {
 	
@@ -147,10 +176,19 @@ void Ingame::render(RenderTarget* drawObj)
 		}
 		/*player[Dragon]->render(drawObj);*/
 		drawObj->draw(battleBackground);
-		for(auto&& map : players)
+		for (auto&& map : playersIngame)
 		{
-			map.second->render(drawObj);
+			if (map.second != nullptr)
+			{
+				if (map.first == "Player_1" || map.first == "Player_2")
+				{
+					map.second->render(drawObj);
+				}
+					
+			}
+
 		}
+		
 		
 		for(auto&& map : uiBoxes)
 		{
@@ -163,10 +201,11 @@ void Ingame::render(RenderTarget* drawObj)
 			this->pausaM->render(drawObj);
 		}
 		
+		
 	}
 	catch (const std::exception& p)
 	{
-		std::cout << "The problemas was: " << p.what() << std::endl;
+		std::cout << "From render: The problemas was: " << p.what() << std::endl;
 		
 	}
 	
@@ -226,23 +265,24 @@ void Ingame::Update(float deltaT)
 	checkKeyboardPause(deltaT);
 	updateMousePos();
 	
-	for(auto&& map : uiBoxes)
-	{
-		map.second->update(mousePosView);
-	}
 	if (!paused) //Cuando no esta en pausa
 	{
 		checkKeyboardEvents(deltaT);
-		for(auto&& map: players)
-		{
-			map.second->update(deltaT);
-		}
+		updateGuiStatus("Player_1", forCorrectPorpouses);
 		if(anotherClient == true)
 		{
 			initPlayer();
 			anotherClient = false;
+			
 		}
-		updateGuiStatus("Player_1", forCorrectPorpouses);
+		for (auto map : playersIngame)
+		{
+			map.second->update(deltaT);
+
+			/*cout << *map.second << endl;*/
+		}
+
+		
 		
 	}
 	else //Pausa
@@ -252,6 +292,10 @@ void Ingame::Update(float deltaT)
 		
 		
 		
+	}
+	for (auto&& map : uiBoxes)
+	{
+		map.second->update(mousePosView);
 	}
 	if(Keyboard::isKeyPressed(Keyboard::Tab))
 	{
@@ -264,15 +308,15 @@ void Ingame::Update(float deltaT)
 void Ingame::updateGuiStatus(const std::string& playerKey, std::string& action)
 {
 	bool defense = false;
-	std::cout << "Entering to updateGuiStatus" << endl;
-	auto player = players.get(playerKey);
+	auto player = playersIngame.get(playerKey);
 	if (player == nullptr) {
 		std::cout << "Retorne de Gui Status" << endl;
 		return;
 	}
 	if(playerKey == "Player_1")
 	{
-		for (auto&& map1 : players)
+		forCorrectPorpouses = action;
+		for (auto&& map1 : playersIngame)
 		{
 			for (auto&& map2 : uiBoxes)
 			{
@@ -311,7 +355,6 @@ void Ingame::updateGuiStatus(const std::string& playerKey, std::string& action)
 						{
 							std::cout << map1.first << " Stats después de la variación " << endl << *map1.second << endl;
 						}
-						
 						Packet packet;
 						packet << action << playerKey << defense;
 						if (socket->send(packet) != Socket::Done)
@@ -416,19 +459,18 @@ void Ingame::initPlayer()
 	if (this->estados[0]->getChosenCharacter() == 1)
 	{
 		textureProcessor("assets/Spritesheets/Pjs/Sprites/dragon/SpritesDragon.png", "Dragon_T");
-		createPlayer("Dragon_T", 151, 429);
+		createPlayer("Dragon_T", 151, 270);
 
 	}
 	else if (this->estados[0]->getChosenCharacter() == 2)
 	{
 		textureProcessor("assets/Spritesheets/Pjs/Sprites/sirena/sirena.png", "Sirena_T");
-		createPlayer("Sirena_T", 151, 429);
+		createPlayer("Sirena_T", 251, 329);
 	}
 	else if (this->estados[0]->getChosenCharacter() == 3)
 	{
 		textureProcessor("assets/Spritesheets/Pjs/Sprites/ogro/Ogro1.png", "Ogro_T");
 		createPlayer("Ogro_T", 151, 429);
-		this->players["Player_1"]->getEntitySprite()->setScale(3.f, 3.f);
 
 	}
 	else if (this->estados[0]->getChosenCharacter() == 4)
@@ -448,27 +490,28 @@ void Ingame::createPlayer(const string& key, float xPos, float yPos)
 	if(clientNumber < 3)
 	{
 		string namePlayer = "Player_" + to_string(clientNumber);
+		cout << namePlayer << "Nombre del jugador" << endl;
 		clientNumber++;
 		if (this->estados[0]->getChosenCharacter() == 1)
 		{
 
-			players[namePlayer] = new Dragon(*stateTextures[key], xPos, yPos);
-			players[namePlayer]->getEntitySprite()->setScale(0.5f, 0.5f);
+			playersIngame[namePlayer] = new Dragon(*stateTextures[key], xPos, yPos);
+			playersIngame[namePlayer]->getEntitySprite()->setScale(1.5f, 1.5f);
 		}
 		else if (this->estados[0]->getChosenCharacter() == 2)
 		{
-			players[namePlayer] = new Sirena(*stateTextures[key], xPos, yPos);
-			players[namePlayer]->getEntitySprite()->setScale(0.5f, 0.5f);
+			playersIngame[namePlayer] = new Sirena(*stateTextures[key], xPos, yPos);
+			playersIngame[namePlayer]->getEntitySprite()->setScale(-1.5f, 1.5f);
 		}
 		else if (this->estados[0]->getChosenCharacter() == 3)
 		{
-			players[namePlayer] = new Ogro(*stateTextures[key], xPos, yPos);
-			players[namePlayer]->getEntitySprite()->setScale(0.5f, 0.5f);
+			playersIngame[namePlayer] = new Ogro(*stateTextures[key], xPos, yPos);
+			playersIngame[namePlayer]->getEntitySprite()->setScale(2.5f, 2.5f);
 		}
 		else if (this->estados[0]->getChosenCharacter() == 4)
 		{
-			players[namePlayer] = new Yordle(*stateTextures[key], xPos, yPos);
-			players[namePlayer]->getEntitySprite()->setScale(2.f, 2.f);
+			playersIngame[namePlayer] = new Yordle(*stateTextures[key], xPos, yPos);
+			playersIngame[namePlayer]->getEntitySprite()->setScale(2.5f, 2.5f);
 		}
 		else
 		{
@@ -476,61 +519,45 @@ void Ingame::createPlayer(const string& key, float xPos, float yPos)
 		}
 		
 		
-		if(this->players.contains("Player_2"))
+		if(this->playersIngame.contains("Player_2"))
 		{
-			if(this->players["Player_2"] != nullptr)
+			if(this->playersIngame["Player_2"] != nullptr)
 			{
 				
-				this->players["Player_2"]->getEntitySprite()->setOrigin(this->players["Player_2"]->getEntitySprite()->getGlobalBounds().width / 2.f,
-					this->players["Player_2"]->getEntitySprite()->getGlobalBounds().height / 2.f);
-					this->players["Player_2"]->setPosition(1580, 500);
+				this->playersIngame["Player_2"]->getEntitySprite()->setOrigin(this->playersIngame["Player_2"]->getEntitySprite()->getGlobalBounds().width / 2.f,
+					this->playersIngame["Player_2"]->getEntitySprite()->getGlobalBounds().height / 2.f);
+					
 					if (this->estados[0]->getChosenCharacter() == 1)
 					{
 
-						players[namePlayer]->getEntitySprite()->setScale(0.5f, 0.5f);
+						playersIngame[namePlayer]->getEntitySprite()->setScale(-1.5f, 1.5f);
+						this->playersIngame["Player_2"]->getEntitySprite()->setPosition(1580, 620);
 					}
 					else if (this->estados[0]->getChosenCharacter() == 2)
 					{
-						players[namePlayer]->getEntitySprite()->setScale(0.5f, 0.5f);
+						playersIngame[namePlayer]->getEntitySprite()->setScale(1.5f, 1.5f);
+						this->playersIngame["Player_2"]->getEntitySprite()->setPosition(1580, 590);
 					}
 					else if (this->estados[0]->getChosenCharacter() == 3)
 					{
-						players[namePlayer]->getEntitySprite()->setScale(0.5f, 0.5f);
+						playersIngame[namePlayer]->getEntitySprite()->setScale(-2.5f, 2.5f);
+						this->playersIngame["Player_2"]->getEntitySprite()->setPosition(1580, 620);
 					}
 					else if (this->estados[0]->getChosenCharacter() == 4)
 					{
-						players[namePlayer]->getEntitySprite()->setScale(2.f, 2.f);
+						playersIngame[namePlayer]->getEntitySprite()->setScale(-2.5f, 2.5f);
+						this->playersIngame["Player_2"]->getEntitySprite()->setPosition(1580, 620);
 					}
 					else
 					{
 						std::cout << "No se devolvio el valor " << endl;
 					}
-				/*if (this->players["Player_2"]->getEntitySprite()->getTexture()->getSize().x == stateTextures["Dragon_T"]->getSize().x && this->stateTextures["Dragon_T"] != nullptr)
-				{
-					std::cout << "Entre a resize y pos 1" << endl;
-					this->players["Player_2"]->setPosition(1580, 485);
-					this->players["Player_2"]->getEntitySprite()->setScale(-1.f, 1.f);
-
-				}
-				else if (this->players["Player_2"]->getEntitySprite()->getTexture()->getSize().x == stateTextures["Ogro_T"]->getSize().x && this->stateTextures["Ogro_T"] != nullptr)
-				{
-					std::cout << "Entre a resize y pos 2" << endl;
-					this->players["Player_2"]->getEntitySprite()->setScale(-3.f, 3.f);
-					this->players["Player_2"]->setPosition(1580, 500);
-				}
-				else if (this->players["Player_2"]->getEntitySprite()->getTexture()->getSize().x == stateTextures["Sirena_T"]->getSize().x && this->stateTextures["Sirena_T"] != nullptr)
-				{
-					std::cout << "Entre a resize y pos 3" << endl;
-					this->players["Player_2"]->getEntitySprite()->setScale(-0.5f, 0.5f);
-					this->players["Player_2"]->setPosition(1580, 578);
-				}
-				else if (this->players["Player_2"]->getEntitySprite()->getTexture()->getSize().x == stateTextures["Yordle_T"]->getSize().x && this->stateTextures["Yordle_T"] != nullptr)
-				{
-					std::cout << "Entre a resize y pos 4" << endl;
-					this->players["Player_2"]->getEntitySprite()->setScale(-2.f, 2.f);
-				}*/
 			}
 			
+		}
+		for(auto map : playersIngame)
+		{
+			std::cout << "Jugador: " << map.first << "Estadisticas: " << *map.second << endl;
 		}
 	}
 }

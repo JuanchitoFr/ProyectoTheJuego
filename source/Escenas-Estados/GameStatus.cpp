@@ -152,14 +152,20 @@ const bool GameStatus::getAnotherClient()
 	return anotherClient;
 }
 
-Entity* GameStatus::getPlayer()
+Entity* GameStatus::getPlayer(const string& key)
 {
-	return nullptr;
+	return players[key];
 }
+
+
 
 Mapa<string, Entity*> GameStatus::getMapPlayer()
 {
-	return Mapa<string, Entity*>();
+	return players;
+}
+
+void GameStatus::setActualPlayers(Mapa<string, Entity*> players)
+{
 }
 
 Mapa<string, Gui::Box*> GameStatus::getUiBoxes()

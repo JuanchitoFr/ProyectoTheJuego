@@ -77,19 +77,11 @@ class GameStatus
 		const bool getSelectedCharacter();
 		void isAnotherClient(bool what);
 		const bool getAnotherClient();
-		virtual Entity* getPlayer();
+		virtual Entity* getPlayer(const string& key);
 		virtual Mapa<string, Entity*> getMapPlayer();
+		virtual void setActualPlayers(Mapa<string, Entity*> players);
 		virtual Mapa<string, Gui::Box*> getUiBoxes();
 		std::pair<bool, string> getPlayerAction(const std::string& playerKey);
-		friend sf::Packet& operator<<(sf::Packet& packet, const std::pair<bool, std::string>& action)
-		{
-			return packet << action.first << action.second;
-		}
-
-		friend sf::Packet& operator>>(sf::Packet& packet, std::pair<bool, std::string>& action)
-		{
-			return packet >> action.first >> action.second;
-		}
 		virtual void setSocket(TcpSocket& socket);
 		virtual void handleAttack(const string& attacker, const string& defender);
 		virtual int calculateDamage(int attackStat, const std::string& defenderKey, bool isDefending);

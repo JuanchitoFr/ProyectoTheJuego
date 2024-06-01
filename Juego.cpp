@@ -7,7 +7,7 @@
 
 int main()
 {
-    Game Juego(1080, 1920, 60, "The game");
+    Game Juego(1080, 1920, 60, "Reinos Mágicos");
     Juego.run();
 }
     

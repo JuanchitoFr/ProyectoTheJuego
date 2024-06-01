@@ -17,10 +17,11 @@ class Game
 		Event event;
 		GameStatus** estados;
 		GameStatus* currentState;
+		Mapa<string, Entity*> actualPlayers;
 		float deltaT;
 		Clock deltaTclock;
 		Time timer;
-		bool isClientTurn, isServerTurn, isServer,isClient;
+		bool isClientTurn, isServerTurn, isServer,isClient, turns, connectionOn;
 		TcpListener listener;
 		TcpSocket client, socket;
 		
